@@ -1,0 +1,9 @@
+[
+    {
+        "id": 0,
+        "title": "Sample Project",
+        "description": "this is a description",
+        "progress": 0,
+        "deadline": "08-02-2026"
+    }
+]

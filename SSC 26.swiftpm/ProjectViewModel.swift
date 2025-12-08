@@ -25,14 +25,9 @@ class ProjectViewModel: ObservableObject {
     func saveProjects(_ projects: [Project]) {
         model.saveProjects(projects)
     }
+    
     func loadProjects() {
         model.reloadProjectsFromStorage()
-    }
-    func addProject(_ project: Project) {
-        model.addProject(project)
-    }
-    func updateProgress(project: Project, progress: Int) {
-        model.updateProgress(project: project, progress: progress)
     }
     
 
@@ -41,7 +36,7 @@ class ProjectViewModel: ObservableObject {
     }
     
     func resetProjects() {
-        UserDefaults.standard.removeObject(forKey: "projects")
+        UserDefaults.standard.removeObject(forKey: "projects") //FIXME: Debug only
     }
     
     func importProjects(from url: URL) {
@@ -49,6 +44,15 @@ class ProjectViewModel: ObservableObject {
     }
     
     //MARK: - User Intents
+    
+    func addProject(_ project: Project) {
+        model.addProject(project)
+    }
+    
+    func updateProgress(project: Project, progress: Int) {
+        model.updateProgress(project: project, progress: progress)
+    }
+    
     func choose(project: Project) {
         
     }

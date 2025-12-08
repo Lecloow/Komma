@@ -20,7 +20,7 @@ struct ContentView: View {
                 
                 Tab("Settings", systemImage: "person.crop.circle") {
                     NavigationStack {
-                        Text("4")
+                        SettingsView(viewModel: viewModel)
                     }
                 }
                 

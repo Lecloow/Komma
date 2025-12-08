@@ -24,7 +24,7 @@ struct ProjectModel {
         var progress: Int
         var deadline: String
         var debugDescription: String {
-            "\(id): \(title) \(description) \(progress) "
+            "\(id): \(title) \(description) \(progress)"
         }
     }
     

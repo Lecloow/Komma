@@ -10,7 +10,6 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    @State var showImporter = false
     @State var showProjectView =  false
     
     
@@ -21,7 +20,6 @@ struct HomeView: View {
                     .onTapGesture {
                         showProjectView.toggle()
 //                        viewModel.updateProgress(project: project, progress: 1)
-//                        projects = viewModel.loadProjects()
                     }
                     .sheet(isPresented: $showProjectView) {
                         ProjectView(project: project)
@@ -38,29 +36,7 @@ struct HomeView: View {
                     Text("New Project")
                 }
             }
-            Button("Exporter") {
-                if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let root = scene.windows.first?.rootViewController {
-                    viewModel.exportProjects(viewModel.projects, from: root)
-                }
-            }
-            Button("Importer") {
-                showImporter = true
-            }
-            Button("Reset Sample Project") {
-                viewModel.resetProjects()
-                viewModel.loadProjects()
-                showImporter = false
-                // rafraîchir la liste
         }
-        }
-        .sheet(isPresented: $showImporter) {
-            ImportJSONView { url in
-                viewModel.importProjects(from: url)
-                viewModel.loadProjects()
-            }
-        }
-        
         .onAppear {
             viewModel.loadProjects()
         }

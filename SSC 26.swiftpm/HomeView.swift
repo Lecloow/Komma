@@ -1,33 +1,36 @@
 //
-//  SwiftUIView.swift
+//  HomeView.swift
 //  SSC 26
 //
 //  Created by Thomas Conchon on 12/4/25.
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 
 struct HomeView: View {
-    var viewModel: ProjectViewModel
+    @ObservedObject var viewModel: ProjectViewModel
     @State var showImporter = false
+    @State var showProjectView =  false
     
-    @State private var projects = [ProjectModel.Project]()
     
     var body: some View {
         ScrollView {
-            ForEach(projects) { project in
+            ForEach(viewModel.projects) { project in
                 CardView(project: project)
                     .onTapGesture {
-                        viewModel.updateProgress(project: project, progress: 1)
-                        projects = viewModel.loadProjects()
+                        showProjectView.toggle()
+//                        viewModel.updateProgress(project: project, progress: 1)
+//                        projects = viewModel.loadProjects()
+                    }
+                    .sheet(isPresented: $showProjectView) {
+                        ProjectView(project: project)
                     }
             }
             Button(action: {
                 let project: ProjectModel.Project = .init(id: 0, title: "Sample Project", description: "No description", progress: 0, deadline: "08-02-2026")
                 viewModel.addProject(project)
-                projects = viewModel.loadProjects()
+                viewModel.loadProjects()
             }) {
                 VStack {
                     Image(systemName: "plus.app")
@@ -38,9 +41,7 @@ struct HomeView: View {
             Button("Exporter") {
                 if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                    let root = scene.windows.first?.rootViewController {
-
-                    let projects = viewModel.loadProjects()
-                    viewModel.exportProjects(projects, from: root)
+                    viewModel.exportProjects(viewModel.projects, from: root)
                 }
             }
             Button("Importer") {
@@ -48,7 +49,7 @@ struct HomeView: View {
             }
             Button("Reset Sample Project") {
                 viewModel.resetProjects()
-                projects = viewModel.loadProjects()
+                viewModel.loadProjects()
                 showImporter = false
                 // rafraîchir la liste
         }
@@ -56,12 +57,12 @@ struct HomeView: View {
         .sheet(isPresented: $showImporter) {
             ImportJSONView { url in
                 viewModel.importProjects(from: url)
-                projects = viewModel.loadProjects() // refresh UI
+                viewModel.loadProjects()
             }
         }
+        
         .onAppear {
-            //projects = viewModel.decode()
-            projects = viewModel.loadProjects()
+            viewModel.loadProjects()
         }
     }
 }
@@ -99,31 +100,3 @@ struct CardView: View {
     }
 }
 
-struct ImportJSONView: UIViewControllerRepresentable {
-    var onPick: (URL) -> Void
-
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.json])
-        picker.delegate = context.coordinator
-        return picker
-    }
-
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(onPick: onPick)
-    }
-
-    class Coordinator: NSObject, UIDocumentPickerDelegate {
-        var onPick: (URL) -> Void
-
-        init(onPick: @escaping (URL) -> Void) {
-            self.onPick = onPick
-        }
-
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            guard let url = urls.first else { return }
-            onPick(url)
-        }
-    }
-}

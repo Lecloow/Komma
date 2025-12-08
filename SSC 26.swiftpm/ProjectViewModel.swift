@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ProjectViewModel.swift
 //  SSC 26
 //
 //  Created by Thomas Conchon on 12/6/25.
@@ -18,101 +18,26 @@ class ProjectViewModel: ObservableObject {
         ProjectModel()
     }
     
-    
-//    func decode() -> [ProjectModel.Project] {
-////            guard let url = Bundle.main.url(forResource: "data", withExtension: "json") else { //FIXME: Doesn't work for some obscur reason
-////                fatalError("Faliled to locate data in bundle")
-////            }
-//        
-//        let url = URL(fileURLWithPath: "/Users/thomasconchon/Documents/Dev/GitHub/SSC/SSC 26.swiftpm/data.json")
-//        
-//        guard let data = try? Data(contentsOf: url) else {
-//            fatalError("Failed to load file from from bundle")
-//        }
-//        
-//        let decoder = JSONDecoder()
-//        
-//        guard let projects = try? decoder.decode([ProjectModel.Project].self, from: data) else {
-//            fatalError("Failed to decode from bundle")
-//        }
-//        
-//        return projects
-//    }
-//    
-//    
-//    func encode(_ projects: [ProjectModel.Project]) {
-//        let url = URL(fileURLWithPath: "/Users/thomasconchon/Documents/Dev/GitHub/SSC/SSC 26.swiftpm/data.json")
-//        
-//        do {
-//            let encoder = JSONEncoder()
-//            encoder.outputFormatting = [.prettyPrinted]
-//            let data = try encoder.encode(projects)
-//            try data.write(to: url)
-//        } catch {
-//            fatalError("Encoding failed: \(error)")
-//        }
-//    }
-//    
-//    
-//    func addProject(_ newProject: ProjectModel.Project) {
-//        var projects = decode()
-//        projects.append(newProject)
-//        encode(projects)
-//    }
-//    
-//    func updateProgress(project: ProjectModel.Project, newProgress: Int) {
-//        var projects = decode()
-//        
-//        if let index = projects.firstIndex(where: { $0.id == project.id }) {
-//            projects[index].progress = newProgress
-//            encode(projects)
-//        } else {
-//            print("Project not found.")
-//        }
-//    }
-    func saveProjects(_ projects: [Project]) {
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(projects) {
-            UserDefaults.standard.set(data, forKey: "projects")
-        }
+    var projects: [Project] {
+        model.projects
     }
-    func loadProjects() -> [Project] {
-        if let data = UserDefaults.standard.data(forKey: "projects") {
-            let decoder = JSONDecoder()
-            if let projects = try? decoder.decode([Project].self, from: data) {
-                return projects
-            }
-        }
-        return []
+    
+    func saveProjects(_ projects: [Project]) {
+        model.saveProjects(projects)
+    }
+    func loadProjects() {
+        model.reloadProjectsFromStorage()
     }
     func addProject(_ project: Project) {
-        var projects = loadProjects()
-        projects.append(project)
-        saveProjects(projects)
+        model.addProject(project)
     }
     func updateProgress(project: Project, progress: Int) {
-        var projects = loadProjects()
-        if let i = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[i].progress += progress
-            saveProjects(projects)
-        }
+        model.updateProgress(project: project, progress: progress)
     }
     
 
     @MainActor func exportProjects(_ projects: [Project], from vc: UIViewController) {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-
-        do {
-            let data = try encoder.encode(projects)
-            let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("projects.json")
-            try data.write(to: tempURL)
-
-            let picker = UIDocumentPickerViewController(forExporting: [tempURL])
-            vc.present(picker, animated: true)
-        } catch {
-            print("Export error:", error)
-        }
+        model.exportProjects(projects, from: vc)
     }
     
     func resetProjects() {
@@ -120,28 +45,49 @@ class ProjectViewModel: ObservableObject {
     }
     
     func importProjects(from url: URL) {
-        // 1. Démarrer l'accès sécurisé
-        guard url.startAccessingSecurityScopedResource() else {
-            print("Could not access security scoped resource")
-            return
-        }
+        model.importProjects(from: url)
+    }
+    
+    //MARK: - User Intents
+    func choose(project: Project) {
         
-        defer {
-            // 3. Toujours libérer à la fin
-            url.stopAccessingSecurityScopedResource()
-        }
+    }
+    func update(project: Project) {
         
-        do {
-            // 2. Charger le JSON
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            let importedProjects = try decoder.decode([Project].self, from: data)
-            
-            // Écraser et sauvegarder
-            UserDefaults.standard.removeObject(forKey: "projects")
-            saveProjects(importedProjects)
-        } catch {
+    }
+}
+ //TODO: Rewrite this shit
+
+
+
+
+struct ImportJSONView: UIViewControllerRepresentable {
+    var onPick: (URL) -> Void
+
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.json])
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onPick: onPick)
+    }
+
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        var onPick: (URL) -> Void
+
+        init(onPick: @escaping (URL) -> Void) {
+            self.onPick = onPick
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            guard let url = urls.first else { return }
+            onPick(url)
         }
     }
 }
 
+//TODO: rework the viewModel and the model

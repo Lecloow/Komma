@@ -26,9 +26,7 @@ struct HomeView: View {
                     }
             }
             Button(action: {
-                let project: ProjectModel.Project = .init(id: 0, title: "Sample Project", description: "No description", progress: 0, deadline: "08-02-2026")
-                viewModel.addProject(project)
-                viewModel.loadProjects()
+                viewModel.addProject(title: "Untitled", description: "Nothing here.", deadline: "08-02-2026")
             }) {
                 VStack {
                     Image(systemName: "plus.app")
@@ -42,37 +40,3 @@ struct HomeView: View {
         }
     }
 }
-
-struct CardView: View {
-    typealias Project = ProjectModel.Project
-    
-    let project: Project
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.white)
-                .aspectRatio(32/9, contentMode: .fit)
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(.gray)
-                .aspectRatio(32/9, contentMode: .fit)
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(project.title)
-                        .font(.title)
-                    Text("Deadline: \(project.deadline)")
-                    Text(project.description)
-                        .font(.caption)
-                }
-                Spacer()
-                VStack {
-                    Text("\(project.progress)")
-                    Image(systemName: "progress.indicator")
-                }
-            }
-            .padding()
-        }
-        .padding(.horizontal)
-    }
-}
-

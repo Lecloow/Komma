@@ -1,5 +1,5 @@
 //
-//  ProjectModel.swift
+//  ProjectManager.swift
 //  SSC 26
 //
 //  Created by Thomas Conchon on 12/6/25.
@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 import SwiftUI
 
 
-struct ProjectModel {
+struct ProjectManager {
     private(set) var projects: [Project]
     
     init() {
@@ -22,10 +22,15 @@ struct ProjectModel {
         let title: String
         let description: String
         var progress: Int
+        var status: Status
         var deadline: String
         var debugDescription: String {
             "\(id): \(title) \(description) \(progress)"
         }
+    }
+    
+    enum Status: Codable {
+        case later, onHold, inProgress, inReview, done
     }
     
     func saveProjects(_ projects: [Project]) {

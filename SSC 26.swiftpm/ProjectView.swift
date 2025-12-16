@@ -11,7 +11,8 @@ struct ProjectView: View {
     var project: ProjectManager.Project
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            //Color.white.opacity(0).frame(height: 0) //FIXME: WTF this is fully broken
             Text(project.title)
                 .font(.largeTitle)
             Divider()
@@ -20,22 +21,31 @@ struct ProjectView: View {
             Text(project.deadline)
             //Text(project.status)
             switch project.status {
-                case .later:
-                    Text("later").foregroundStyle(.gray)
-                case .onHold:
-                    Text("on Hold").foregroundStyle(.red)
-                case .inProgress:
-                    Text("in Progress").foregroundStyle(.blue)
-                case .inReview:
-                    Text("In Review").foregroundStyle(.orange)
-                case .done:
-                    Text("Done").foregroundStyle(.green)
+            case .later:
+                Text("later").foregroundStyle(.gray)
+            case .onHold:
+                Text("on Hold").foregroundStyle(.red)
+            case .inProgress:
+                Text("in Progress").foregroundStyle(.blue)
+            case .inReview:
+                Text("In Review").foregroundStyle(.orange)
+            case .done:
+                Text("Done").foregroundStyle(.green)
             }
+            //TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
             Text("Progress: \(project.progress)")
             Text("id: \(project.id)")
             Spacer()
         }
-        .padding()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                }) {
+                    Image(systemName: "square.and.pencil")
+                }
+            }
+        } //TODO: Button Delete etc...
         .multilineTextAlignment(.leading)
+        .padding()
     }
 }

@@ -37,7 +37,7 @@ class ProjectViewModel: ObservableObject {
     }
     
     func resetProjects() {
-        UserDefaults.standard.removeObject(forKey: "projects") //FIXME: Debug only
+        UserDefaults.standard.removeObject(forKey: "projects") //FIXME: Debug only // Create option in settings to delete account
     }
     
     func importProjects(from url: URL) {
@@ -66,7 +66,6 @@ class ProjectViewModel: ObservableObject {
     }
 }
  //TODO: Rewrite this shit
-
 
 
 

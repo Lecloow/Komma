@@ -12,13 +12,12 @@ struct ProjectView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            //Color.white.opacity(0).frame(height: 0) //FIXME: WTF this is fully broken
             Text(project.title)
                 .font(.largeTitle)
             Divider()
             Text(project.description)
-            //Text(project.deadline, format: .dateTime)
-            Text(project.deadline)
+            Text(project.deadline, format: .dateTime)
+            //Text(project.deadline)
             //Text(project.status)
             switch project.status {
             case .later:

@@ -19,11 +19,11 @@ struct ProjectManager {
     
     struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
         let id: Int
-        let title: String
-        let description: String
+        var title: String
+        var description: String
         var progress: Int
         var status: Status
-        var deadline: String
+        var deadline: Date
         var debugDescription: String {
             "\(id): \(title) \(description) \(progress)"
         }
@@ -63,6 +63,11 @@ struct ProjectManager {
             projects[i].progress += progress
             saveProjects(projects)
         }
+    }
+    
+    mutating func update(at index: Int, project: Project) {
+        projects[index] = project
+        saveProjects(projects)
     }
     
     @MainActor func exportProjects(_ projects: [Project], from vc: UIViewController) {

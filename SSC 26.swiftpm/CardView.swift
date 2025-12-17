@@ -24,7 +24,7 @@ struct CardView: View {
                 VStack(alignment: .leading) {
                     Text(project.title)
                         .font(.title)
-                    Text("Deadline: \(project.deadline)")
+                    Text("Deadline: \(project.deadline.formatted(date: .abbreviated, time: .standard))")
                     Text(project.description)
                         .font(.caption)
                 }
@@ -34,6 +34,7 @@ struct CardView: View {
                     Image(systemName: "progress.indicator")
                 }
             }
+            .foregroundStyle(.primary)
             .padding()
         }
         .padding(.horizontal)

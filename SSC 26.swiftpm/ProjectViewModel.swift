@@ -29,8 +29,6 @@ class ProjectViewModel: ObservableObject {
     func loadProjects() {
         model.reloadProjectsFromStorage()
     }
-    
-    
 
     @MainActor func exportProjects(_ projects: [Project], from vc: UIViewController) {
         model.exportProjects(projects, from: vc)
@@ -46,26 +44,23 @@ class ProjectViewModel: ObservableObject {
     
     //MARK: - User Intents
     
-    func addProject(title: String, description: String, deadline: String) {
+    func addProject(title: String, description: String, deadline: Date) {
         let newID = (projects.last?.id ?? 0) + 1
         let project: ProjectManager.Project = .init(id: newID, title: title, description: description, progress: 0, status:  ProjectManager.Status.inProgress, deadline: deadline)
         model.addProject(project)
         loadProjects()
     }
-    
-    func updateProgress(project: Project, progress: Int) {
-        model.updateProgress(project: project, progress: progress)
-        loadProjects()
-    }
-    
+        
     func choose(project: Project) {
         loadProjects()
     }
     func update(project: Project) {
-        loadProjects()
+        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+            model.update(at: index, project: project)
+        }
     }
 }
- //TODO: Rewrite this shit
+
 
 
 

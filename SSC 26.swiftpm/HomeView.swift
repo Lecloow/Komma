@@ -26,6 +26,7 @@ struct HomeView: View {
                             .font(Font.system(size: 50))
                         Text("New Project")
                     }
+                    .tint(.primary)
                 }
             }
         }

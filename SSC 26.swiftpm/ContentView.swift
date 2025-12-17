@@ -12,9 +12,21 @@ struct ContentView: View {
                     }
                 }
                 
-                Tab("Focus", systemImage: "message") {
+                Tab("Focus", systemImage: "figure.mind.and.body") {
+                    NavigationStack {
+                        Text("1")
+                    }
+                }
+                
+                Tab("Today", systemImage: "message") {
                     NavigationStack {
                         Text("2")
+                    }
+                }
+                
+                Tab("Calendar", systemImage: "calendar") {
+                    NavigationStack {
+                        Text("3")
                     }
                 }
                 
@@ -24,11 +36,6 @@ struct ContentView: View {
                     }
                 }
                 
-                Tab(role: .search) {
-                    NavigationStack {
-                        Text("5")
-                    }
-                }
             }
             .tabBarMinimizeBehavior(.onScrollDown)
         } else {

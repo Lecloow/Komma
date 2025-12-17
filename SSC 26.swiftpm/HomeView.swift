@@ -12,12 +12,13 @@ struct HomeView: View {
     @ObservedObject var viewModel: ProjectViewModel
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                ForEach(viewModel.projects) { project in
-                    NavigationLink(destination: ProjectView(project: project)) {
-                        CardView(project: project)
-                            .tint(.primary)
+        VStack {
+                ScrollView {
+                    ForEach(viewModel.projects) { project in
+                        NavigationLink(destination: ProjectView(project: project)) {
+                            CardView(project: project)
+                                .tint(.primary)
+                        }
                     }
                 }
                 NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
@@ -28,7 +29,7 @@ struct HomeView: View {
                     }
                     .tint(.primary)
                 }
-            }
+                .padding()
         }
         .onAppear {
             viewModel.loadProjects()

@@ -8,15 +8,18 @@
 import SwiftUI
 
 struct ProjectView: View {
+    @ObservedObject var viewModel: ProjectViewModel
     var project: ProjectManager.Project
     
+    @State var isShowingDeletePopup = false
+
     var body: some View {
         VStack(alignment: .leading) {
             Text(project.title)
                 .font(.largeTitle)
             Divider()
             Text(project.description)
-            Text(project.deadline, format: .dateTime)
+            Text("\(project.deadline.formatted(date: .abbreviated, time: .omitted))")
             //Text(project.deadline)
             //Text(project.status)
             switch project.status {
@@ -33,14 +36,24 @@ struct ProjectView: View {
             }
             //TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
             Text("Progress: \(project.progress)")
-            Text("id: \(project.id)")
             Spacer()
+        }
+        .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete Project", role: .destructive) {
+                viewModel.delete(project: project, )
+                viewModel.loadProjects() //FIXME: Do we need this line ?
+            }
+        } message: {
+            Text("This will permanently delete the project. You can't undo this.")
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                }) {
+                NavigationLink(destination: CreateProjectView(viewModel: viewModel, project: project)) {
                     Image(systemName: "square.and.pencil")
+                }
+                Button(action: { }) {
+                    Image(systemName: "trash")
                 }
             }
         } //TODO: Button Delete etc...

@@ -57,12 +57,9 @@ struct ProjectManager {
         projects.append(project)
         saveProjects(projects)
     }
-    
-    mutating func updateProgress(project: Project, progress: Int) {
-        if let i = projects.firstIndex(where: { $0.id == project.id }) {
-            projects[i].progress += progress
-            saveProjects(projects)
-        }
+
+    mutating func delete(at index: Int) {
+        projects.remove(at: index)
     }
     
     mutating func update(at index: Int, project: Project) {

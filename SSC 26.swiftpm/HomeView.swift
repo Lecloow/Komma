@@ -15,12 +15,13 @@ struct HomeView: View {
         VStack {
                 ScrollView {
                     ForEach(viewModel.projects) { project in
-                        NavigationLink(destination: ProjectView(project: project)) {
-                            CardView(project: project)
+                        NavigationLink(destination: ProjectView(viewModel: viewModel, project: project)) {
+                            CardView(project: project) //FIXME: Too close to the top
                                 .tint(.primary)
                         }
                     }
                 }
+                .padding(.top)
                 NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
                     VStack {
                         Image(systemName: "plus.app")

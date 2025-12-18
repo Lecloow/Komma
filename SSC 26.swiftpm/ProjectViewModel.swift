@@ -54,6 +54,13 @@ class ProjectViewModel: ObservableObject {
     func choose(project: Project) {
         loadProjects()
     }
+    
+    func delete(project: Project) {
+        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+            model.delete(at: index)
+        }
+    }
+    
     func update(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             model.update(at: index, project: project)

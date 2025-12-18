@@ -24,7 +24,7 @@ struct CardView: View {
                 VStack(alignment: .leading) {
                     Text(project.title)
                         .font(.title)
-                    Text("Deadline: \(project.deadline.formatted(date: .abbreviated, time: .standard))")
+                    Text("Deadline: \(project.deadline.formatted(date: .abbreviated, time: .omitted))")
                     Text(project.description)
                         .font(.caption)
                 }

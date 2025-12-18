@@ -49,11 +49,13 @@ struct ProjectView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: CreateProjectView(viewModel: viewModel, project: project)) {
-                    Image(systemName: "square.and.pencil")
-                }
-                Button(action: { }) {
-                    Image(systemName: "trash")
+                HStack {
+                    NavigationLink(destination: CreateProjectView(viewModel: viewModel, project: project)) {
+                        Image(systemName: "square.and.pencil")
+                    }
+                    Button(action: { isShowingDeletePopup = true}) {
+                        Image(systemName: "gear")
+                    }
                 }
             }
         } //TODO: Button Delete etc...

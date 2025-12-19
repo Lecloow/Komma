@@ -23,6 +23,8 @@ struct ProjectManager {
         var description: String
         var progress: Int
         var status: Status
+        var priority: Priority
+        var subTasks: [SubTask]?
         var deadline: Date
         var debugDescription: String {
             "\(id): \(title) \(description) \(progress)"
@@ -31,6 +33,16 @@ struct ProjectManager {
     
     enum Status: Codable {
         case later, onHold, inProgress, inReview, done
+    }
+    
+    enum Priority: Codable {
+        case low, normal, high //FIXME: CHange priority
+    }
+    
+    struct SubTask: Codable, Identifiable, Equatable {
+        let id: Int
+        var title: String
+        var isComplete: Bool
     }
     
     func saveProjects(_ projects: [Project]) {

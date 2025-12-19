@@ -61,18 +61,6 @@ struct CreateProjectView: View {
                             Text("Done").tag(ProjectManager.Status.done)
                         }
                     }
-//                    switch project.status {
-//                    case .later:
-//                        Text("later").foregroundStyle(.gray)
-//                    case .onHold:
-//                        Text("on Hold").foregroundStyle(.red)
-//                    case .inProgress:
-//                        Text("in Progress").foregroundStyle(.blue)
-//                    case .inReview:
-//                        Text("In Review").foregroundStyle(.orange)
-//                    case .done:
-//                        Text("Done").foregroundStyle(.green)
-//                    }
                     // TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
 //                    Text("Progress: \(project.progress)")
                     Spacer()

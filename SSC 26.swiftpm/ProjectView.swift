@@ -10,6 +10,7 @@ import SwiftUI
 struct ProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     var project: ProjectManager.Project
+    @Environment(\.dismiss) private var dismiss
     
     @State var isShowingDeletePopup = false
 
@@ -20,8 +21,6 @@ struct ProjectView: View {
             Divider()
             Text(project.description)
             Text("\(project.deadline.formatted(date: .abbreviated, time: .omitted))")
-            //Text(project.deadline)
-            //Text(project.status)
             switch project.status {
             case .later:
                 Text("later").foregroundStyle(.gray)
@@ -41,8 +40,8 @@ struct ProjectView: View {
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
             Button("Cancel", role: .cancel) { }
             Button("Delete Project", role: .destructive) {
-                viewModel.delete(project: project, )
-                viewModel.loadProjects() //FIXME: Do we need this line ?
+                viewModel.delete(project: project)
+                dismiss()
             }
         } message: {
             Text("This will permanently delete the project. You can't undo this.")
@@ -53,7 +52,19 @@ struct ProjectView: View {
                     NavigationLink(destination: CreateProjectView(viewModel: viewModel, project: project)) {
                         Image(systemName: "square.and.pencil")
                     }
-                    Button(action: { isShowingDeletePopup = true}) {
+                    
+                    Menu {
+                        Button(role: .destructive) { isShowingDeletePopup = true } label: {
+                            Label("Delete Project", systemImage: "trash")
+                        }
+
+                        Button {
+                            // autre action
+                        } label: {
+                            Label("IDK", systemImage: "mappin")
+                        }
+
+                    } label: {
                         Image(systemName: "gear")
                     }
                 }
@@ -63,3 +74,4 @@ struct ProjectView: View {
         .padding()
     }
 }
+//FIXME: Clean this shit

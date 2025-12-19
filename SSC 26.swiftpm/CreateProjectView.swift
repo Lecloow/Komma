@@ -10,6 +10,8 @@ import SwiftUI
 struct CreateProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @State var project: ProjectManager.Project?
+    @Environment(\.dismiss) private var dismiss
+
         
     var body: some View {
         VStack {
@@ -75,14 +77,7 @@ struct CreateProjectView: View {
 //                    Text("Progress: \(project.progress)")
                     Spacer()
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                        }) {
-                            Image(systemName: "square.and.pencil")
-                        }
-                    }
-                } // TODO: Button Delete etc...
+                .toolbar { toolbar }
                 .multilineTextAlignment(.leading)
                 .padding()
             }
@@ -91,6 +86,24 @@ struct CreateProjectView: View {
             if project == nil {
                 viewModel.addProject(title: "", description: "", deadline: Date())
                 project = viewModel.projects.last!
+            }
+        }
+    }
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            if #available(iOS 26.0, *) {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.glassProminent)
+                .tint(.primary)
+            } else {
+                Button(action: { dismiss() }) {
+                    Image(systemName: "checkmark")
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.primary)
             }
         }
     }

@@ -33,7 +33,7 @@ struct SettingsView: View {
         .alert("Delete All Projects ?", isPresented: $isShowingResetPopup) {
             Button("Cancel", role: .cancel) { }
             Button("Delete Everything", role: .destructive) {
-                viewModel.resetProjects()
+                viewModel.deleteAccount()
                 viewModel.loadProjects()
             }
         } message: {

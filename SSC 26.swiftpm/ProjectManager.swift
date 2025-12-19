@@ -60,6 +60,7 @@ struct ProjectManager {
 
     mutating func delete(at index: Int) {
         projects.remove(at: index)
+        saveProjects(projects)
     }
     
     mutating func update(at index: Int, project: Project) {

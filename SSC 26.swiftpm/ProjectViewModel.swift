@@ -34,8 +34,8 @@ class ProjectViewModel: ObservableObject {
         model.exportProjects(projects, from: vc)
     }
     
-    func resetProjects() {
-        UserDefaults.standard.removeObject(forKey: "projects") //FIXME: Debug only // Create option in settings to delete account
+    func deleteAccount() {
+        UserDefaults.standard.removeObject(forKey: "projects")
     }
     
     func importProjects(from url: URL) {
@@ -67,6 +67,7 @@ class ProjectViewModel: ObservableObject {
         }
     }
 }
+
 
 
 

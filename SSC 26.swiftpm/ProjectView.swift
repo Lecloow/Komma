@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    var project: ProjectManager.Project
+    var project: Project
     @Environment(\.dismiss) private var dismiss
     
     @State var isShowingDeletePopup = false

@@ -10,48 +10,38 @@ import UniformTypeIdentifiers
 import SwiftUI
 
 
+struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
+    let id: Int
+    var title: String
+    var description: String
+    var progress: Int
+    var status: Status
+    var priority: Priority
+    var subTasks: [SubTask]?
+    var deadline: Date
+    var debugDescription: String {
+        "\(id): \(title) \(description) \(progress)"
+    }
+}
+
+enum Status: Codable {
+    case later, onHold, inProgress, inReview, done
+}
+
+enum Priority: Codable {
+    case low, normal, high //FIXME: CHange priority
+}
+
+struct SubTask: Codable, Identifiable, Equatable {
+    let id: Int
+    var title: String
+    var isComplete: Bool
+}
+
 struct ProjectManager {
     private(set) var projects: [Project]
     
     init() {
-        projects = Self.loadProjects()
-    }
-    
-    struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
-        let id: Int
-        var title: String
-        var description: String
-        var progress: Int
-        var status: Status
-        var priority: Priority
-        var subTasks: [SubTask]?
-        var deadline: Date
-        var debugDescription: String {
-            "\(id): \(title) \(description) \(progress)"
-        }
-    }
-    
-    enum Status: Codable {
-        case later, onHold, inProgress, inReview, done
-    }
-    
-    enum Priority: Codable {
-        case low, normal, high //FIXME: CHange priority
-    }
-    
-    struct SubTask: Codable, Identifiable, Equatable {
-        let id: Int
-        var title: String
-        var isComplete: Bool
-    }
-    
-    func saveProjects(_ projects: [Project]) {
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(projects) {
-            UserDefaults.standard.set(data, forKey: "projects")
-        }
-    }
-    mutating func reloadProjectsFromStorage() {
         projects = Self.loadProjects()
     }
     
@@ -65,17 +55,29 @@ struct ProjectManager {
         return []
     }
     
+    func saveProjects(_ projects: [Project]) {
+        let encoder = JSONEncoder()
+        if let data = try? encoder.encode(projects) {
+            UserDefaults.standard.set(data, forKey: "projects")
+        }
+    }
+
+    mutating func reloadProjectsFromStorage() {
+        projects = Self.loadProjects()
+    }
+    
+    
     mutating func addProject(_ project: Project) {
         projects.append(project)
         saveProjects(projects)
     }
 
-    mutating func delete(at index: Int) {
+    mutating func delete(atIndex index: Int) {
         projects.remove(at: index)
         saveProjects(projects)
     }
     
-    mutating func update(at index: Int, project: Project) {
+    mutating func update(atIndex index: Int, project: Project) {
         projects[index] = project
         saveProjects(projects)
     }
@@ -118,4 +120,4 @@ struct ProjectManager {
         }
     }
 }
-
+//FIXME: Clean up this code

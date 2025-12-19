@@ -12,7 +12,6 @@ import UniformTypeIdentifiers
 
 class ProjectViewModel: ObservableObject {
     @Published private var model = createProjectModel()
-    typealias Project = ProjectManager.Project
     
     private static func createProjectModel() -> ProjectManager {
         ProjectManager()
@@ -46,7 +45,7 @@ class ProjectViewModel: ObservableObject {
     
     func addProject(title: String, description: String, deadline: Date) {
         let newID = (projects.last?.id ?? 0) + 1
-        let project: ProjectManager.Project = .init(id: newID, title: title, description: description, progress: 0, status:  ProjectManager.Status.inProgress, priority: ProjectManager.Priority.normal, subTasks: nil, deadline: deadline)
+        let project: Project = .init(id: newID, title: title, description: description, progress: 0, status:  Status.inProgress, priority: Priority.normal, subTasks: nil, deadline: deadline)
         model.addProject(project)
         loadProjects()
     }
@@ -57,13 +56,13 @@ class ProjectViewModel: ObservableObject {
     
     func delete(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            model.delete(at: index)
+            model.delete(atIndex: index)
         }
     }
     
     func update(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            model.update(at: index, project: project)
+            model.update(atIndex: index, project: project)
         }
     }
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CardView: View {
-    typealias Project = ProjectManager.Project
     
     let project: Project
     

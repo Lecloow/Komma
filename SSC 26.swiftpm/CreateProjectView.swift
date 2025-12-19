@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreateProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
-    @State var project: ProjectManager.Project?
+    @State var project: Project?
     @Environment(\.dismiss) private var dismiss
 
         
@@ -54,11 +54,11 @@ struct CreateProjectView: View {
                                 updateProject()
                             }
                         )) {
-                            Text("Later").tag(ProjectManager.Status.later)
-                            Text("On Hold").tag(ProjectManager.Status.onHold)
-                            Text("In Progress").tag(ProjectManager.Status.inProgress)
-                            Text("In Review").tag(ProjectManager.Status.inReview)
-                            Text("Done").tag(ProjectManager.Status.done)
+                            Text("Later").tag(Status.later)
+                            Text("On Hold").tag(Status.onHold)
+                            Text("In Progress").tag(Status.inProgress)
+                            Text("In Review").tag(Status.inReview)
+                            Text("Done").tag(Status.done)
                         }
                     }
                     // TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)

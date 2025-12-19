@@ -102,3 +102,5 @@ struct CreateProjectView: View {
         }
     }
 }
+
+//FIXME: Clean this code

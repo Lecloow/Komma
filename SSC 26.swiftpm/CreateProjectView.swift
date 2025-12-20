@@ -131,7 +131,7 @@ struct CreateProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @Environment(\.dismiss) private var dismiss
     
-    @State var projectId: Int?
+    @State var projectId: Project.ID?
         
     private var project: Project? {
         guard let id = projectId else { return nil }
@@ -140,14 +140,14 @@ struct CreateProjectView: View {
         
     var body: some View {
         VStack {
-            if let project = project {  // ← if LET, pas if VAR
+            if let project = project { 
                 VStack(alignment: .leading) {
-                    TextField("Untitled", text: Binding(
+                    TextField("Untitled Project", text: Binding(
                         get: { project.title },
                         set: { newValue in
-                            var updatedProject = project  // ← Copie locale DANS le Binding
+                            var updatedProject = project
                             updatedProject.title = newValue
-                            viewModel.update(project: updatedProject)  // ← Update direct
+                            viewModel.update(project: updatedProject)
                         }
                     ))
                     .font(.largeTitle)
@@ -192,17 +192,7 @@ struct CreateProjectView: View {
                     }
                     
                     ForEach(project.subTasks) { subTask in
-                        HStack {
-                            Text(subTask.title)
-                            Button(action: { viewModel.completeSubTask(project: project, subTask: subTask) }) { //FIXME: Not here but in the ProjectView and add haptic and confetti
-                                if #available(iOS 17.0, *) {
-                                    Image(systemName: subTask.isComplete ? "checkmark.circle.fill" : "circle")
-                                        .contentTransition(.symbolEffect(.replace))
-                                } else {
-                                    Image(systemName: subTask.isComplete ? "checkmark.circle.fill" : "circle")
-                                }
-                            }
-                        }
+                        EditSubTaskView(viewModel: viewModel, projectId: projectId, subTaskId: subTask.id)
                     }
                     
                     Button(action: { viewModel.addSubTask(project: project, title: "Subtask") }) {

@@ -35,6 +35,10 @@ struct ProjectView: View {
             }
             //TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
             Text("Progress: \(project.progress)")
+            Divider()
+            ForEach(project.subTasks) { subTask in
+                SubTaskView(viewModel: viewModel, projectId: project.id, subTaskId: subTask.id)
+            }
             Spacer()
         }
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
@@ -52,7 +56,6 @@ struct ProjectView: View {
                     NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
                         Image(systemName: "square.and.pencil")
                     }
-                    
                     Menu {
                         Button(role: .destructive) { isShowingDeletePopup = true } label: {
                             Label("Delete Project", systemImage: "trash")

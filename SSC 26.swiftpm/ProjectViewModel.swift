@@ -69,27 +69,38 @@ class ProjectViewModel: ObservableObject {
     }
     
     func completeSubTask(project: Project, subTask: SubTask) {
-        if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            //if projects[index].subTasks != nil {
-                if let subTaskIndex = projects[index].subTasks.firstIndex(where: { $0.id == subTask.id }) {
-                    model.completeSubTask(atIndex: index, project: project, subTaskIndex: subTaskIndex)
-                    objectWillChange.send()
+        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
+                if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
+                    model.completeSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
                     loadProjects()
-                    print("ViewModel: \(projects)")
-
                 }
-            //}
         }
     }
     
-    func addSubTask(project: Project, title: String) { //FIXME: Why asking for a subTask when you need to create it indeed, ask for title
+    func addSubTask(project: Project, title: String) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             let newId = (projects[index].subTasks.last?.id ?? 0) + 1
             let subTask = SubTask(id: newId, title: title, isComplete: false)
             model.addSubTasks(atIndex: index, project: project, subTask: subTask)
-            objectWillChange.send()
             loadProjects()
-            print("ViewModel: \(projects)")
+        }
+    }
+    
+    func updateSubTask(project: Project, subTask: SubTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
+            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
+                model.updateSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex, subTask: subTask)
+                loadProjects()
+            }
+        }
+    }
+    
+    func deleteSubTask(project: Project, subTask: SubTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
+            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
+                model.deleteSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
+                loadProjects()
+            }
         }
     }
 }

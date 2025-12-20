@@ -194,9 +194,7 @@ struct CreateProjectView: View {
                     ForEach(project.subTasks) { subTask in
                         HStack {
                             Text(subTask.title)
-                            Button(action: {
-                                viewModel.completeSubTask(project: project, subTask: subTask)
-                            }) {
+                            Button(action: { viewModel.completeSubTask(project: project, subTask: subTask) }) { //FIXME: Not here but in the ProjectView and add haptic and confetti
                                 if #available(iOS 17.0, *) {
                                     Image(systemName: subTask.isComplete ? "checkmark.circle.fill" : "circle")
                                         .contentTransition(.symbolEffect(.replace))
@@ -207,9 +205,7 @@ struct CreateProjectView: View {
                         }
                     }
                     
-                    Button(action: {
-                        viewModel.addSubTask(project: project, title: "Subtask")
-                    }) {
+                    Button(action: { viewModel.addSubTask(project: project, title: "Subtask") }) {
                         Text("Add subtask")
                     }
                     

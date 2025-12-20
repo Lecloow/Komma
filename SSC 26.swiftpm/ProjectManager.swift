@@ -55,17 +55,23 @@ struct ProjectManager {
     
     mutating func addSubTasks(atIndex index: Int, project: Project, subTask: SubTask) {
         projects[index].subTasks.append(subTask)
-        print("Model: \(projects)")
-        saveProjects(projects)
-    } //FIXME: Same that update so do we need this func ?
-    
-    mutating func completeSubTask(atIndex index: Int, project: Project, subTaskIndex: Int) {
-        projects[index].subTasks[subTaskIndex].isComplete.toggle()
-        print("Model: \(projects)")
         saveProjects(projects)
     }
     
+    mutating func completeSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int) {
+        projects[projectIndex].subTasks[subTaskIndex].isComplete.toggle()
+        saveProjects(projects)
+    }
     
+    mutating func updateSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int, subTask: SubTask) {
+        projects[projectIndex].subTasks[subTaskIndex] = subTask
+        saveProjects(projects)
+    }
+    
+    mutating func deleteSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int) {
+        projects[projectIndex].subTasks.remove(at: subTaskIndex)
+        saveProjects(projects)
+    }
     
     
     

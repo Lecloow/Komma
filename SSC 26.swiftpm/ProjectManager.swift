@@ -9,35 +9,6 @@ import Foundation
 import UniformTypeIdentifiers
 import SwiftUI
 
-
-struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
-    let id: Int
-    var title: String
-    var description: String
-    var progress: Int
-    var status: Status
-    var priority: Priority
-    var subTasks: [SubTask]?
-    var deadline: Date
-    var debugDescription: String {
-        "\(id): \(title) \(description) \(progress)"
-    }
-}
-
-enum Status: Codable {
-    case later, onHold, inProgress, inReview, done
-}
-
-enum Priority: Codable {
-    case low, normal, high //FIXME: CHange priority
-}
-
-struct SubTask: Codable, Identifiable, Equatable {
-    let id: Int
-    var title: String
-    var isComplete: Bool
-}
-
 struct ProjectManager {
     private(set) var projects: [Project]
     
@@ -81,6 +52,23 @@ struct ProjectManager {
         projects[index] = project
         saveProjects(projects)
     }
+    
+    mutating func addSubTasks(atIndex index: Int, project: Project, subTask: SubTask) {
+        projects[index].subTasks.append(subTask)
+        print("Model: \(projects)")
+        saveProjects(projects)
+    } //FIXME: Same that update so do we need this func ?
+    
+    mutating func completeSubTask(atIndex index: Int, project: Project, subTaskIndex: Int) {
+        projects[index].subTasks[subTaskIndex].isComplete.toggle()
+        print("Model: \(projects)")
+        saveProjects(projects)
+    }
+    
+    
+    
+    
+    
     
     @MainActor func exportProjects(_ projects: [Project], from vc: UIViewController) {
         let encoder = JSONEncoder()

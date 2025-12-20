@@ -44,8 +44,8 @@ class ProjectViewModel: ObservableObject {
     //MARK: - User Intents
     
     func addProject(title: String, description: String, deadline: Date) {
-        let newID = (projects.last?.id ?? 0) + 1
-        let project: Project = .init(id: newID, title: title, description: description, progress: 0, status:  Status.inProgress, priority: Priority.normal, subTasks: nil, deadline: deadline)
+        let newId = (projects.last?.id ?? 0) + 1
+        let project: Project = .init(id: newId, title: title, description: description, progress: 0, status:  Status.inProgress, priority: Priority.normal, subTasks: [], deadline: deadline)
         model.addProject(project)
         loadProjects()
     }
@@ -57,12 +57,39 @@ class ProjectViewModel: ObservableObject {
     func delete(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             model.delete(atIndex: index)
+            loadProjects()
         }
     }
     
     func update(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             model.update(atIndex: index, project: project)
+            loadProjects()
+        }
+    }
+    
+    func completeSubTask(project: Project, subTask: SubTask) {
+        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+            //if projects[index].subTasks != nil {
+                if let subTaskIndex = projects[index].subTasks.firstIndex(where: { $0.id == subTask.id }) {
+                    model.completeSubTask(atIndex: index, project: project, subTaskIndex: subTaskIndex)
+                    objectWillChange.send()
+                    loadProjects()
+                    print("ViewModel: \(projects)")
+
+                }
+            //}
+        }
+    }
+    
+    func addSubTask(project: Project, title: String) { //FIXME: Why asking for a subTask when you need to create it indeed, ask for title
+        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+            let newId = (projects[index].subTasks.last?.id ?? 0) + 1
+            let subTask = SubTask(id: newId, title: title, isComplete: false)
+            model.addSubTasks(atIndex: index, project: project, subTask: subTask)
+            objectWillChange.send()
+            loadProjects()
+            print("ViewModel: \(projects)")
         }
     }
 }

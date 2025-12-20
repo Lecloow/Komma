@@ -49,7 +49,7 @@ struct ProjectView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack {
-                    NavigationLink(destination: CreateProjectView(viewModel: viewModel, project: project)) {
+                    NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
                         Image(systemName: "square.and.pencil")
                     }
                     
@@ -74,4 +74,5 @@ struct ProjectView: View {
         .padding()
     }
 }
+
 //FIXME: Clean this shit

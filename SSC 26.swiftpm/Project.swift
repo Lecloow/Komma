@@ -26,7 +26,7 @@ enum Status: Codable {
 }
 
 enum Priority: Codable {
-    case low, normal, high //FIXME: CHange priority
+    case low, normal, high, urgent //FIXME: CHange priority
 }
 
 struct SubTask: Codable, Identifiable, Equatable {

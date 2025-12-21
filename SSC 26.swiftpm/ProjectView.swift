@@ -33,6 +33,16 @@ struct ProjectView: View {
             case .done:
                 Text("Done").foregroundStyle(.green)
             }
+            switch project.priority {
+            case .low:
+                Text("Low").foregroundStyle(.blue)
+            case .normal:
+                Text("Normal").foregroundStyle(.green)
+            case .high:
+                Text("High").foregroundStyle(.orange)
+            case .urgent:
+                Text("Urgent").foregroundStyle(.red)
+            }
             //TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
             Text("Progress: \(project.progress)")
             Divider()

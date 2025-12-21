@@ -190,7 +190,19 @@ struct CreateProjectView: View {
                         Text("In Review").tag(Status.inReview)
                         Text("Done").tag(Status.done)
                     }
-                    
+                    Picker("Change Priority", selection: Binding(
+                        get: { project.priority },
+                        set: { newValue in
+                            var updatedProject = project
+                            updatedProject.priority = newValue
+                            viewModel.update(project: updatedProject)
+                        }
+                    )) {
+                        Text("Low").tag(Priority.low)
+                        Text("Normal").tag(Priority.normal)
+                        Text("High").tag(Priority.high)
+                        Text("Urgent").tag(Priority.urgent)
+                    }
                     ForEach(project.subTasks) { subTask in
                         EditSubTaskView(viewModel: viewModel, projectId: projectId, subTaskId: subTask.id)
                     }

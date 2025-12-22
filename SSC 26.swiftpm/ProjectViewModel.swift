@@ -45,7 +45,7 @@ class ProjectViewModel: ObservableObject {
     
     func addProject(title: String, description: String, deadline: Date) {
         let newId = (projects.last?.id ?? 0) + 1
-        let project: Project = .init(id: newId, title: title, description: description, progress: 0, status:  Status.inProgress, priority: Priority.normal, subTasks: [], deadline: deadline)
+        let project: Project = .init(id: newId, title: title, description: description, status:  Status.inProgress, priority: Priority.normal, subTasks: [], deadline: deadline)
         model.addProject(project)
         loadProjects()
     }

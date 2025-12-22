@@ -33,6 +33,7 @@ struct ProjectView: View {
             case .done:
                 Text("Done").foregroundStyle(.green)
             }
+            
             switch project.priority {
             case .low:
                 Text("Low").foregroundStyle(.blue)

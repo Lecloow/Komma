@@ -1,20 +1,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel: ProjectViewModel
+    @ObservedObject var projectViewModel: ProjectViewModel
+    @ObservedObject var focusViewModel: FocusViewModel
     
     var body: some View {
         if #available(iOS 26.0, *) {
             TabView {
                 Tab("Home", systemImage: "house") {
                     NavigationStack {
-                        HomeView(viewModel: viewModel)
+                        HomeView(viewModel: projectViewModel)
                     }
                 }
                 
                 Tab("Focus", systemImage: "figure.mind.and.body") {
                     NavigationStack {
-                        Text("1")
+                        FocusView(viewModel: focusViewModel)
                     }
                 }
                 
@@ -32,7 +33,7 @@ struct ContentView: View {
                 
                 Tab("Settings", systemImage: "person.crop.circle") {
                     NavigationStack {
-                        SettingsView(viewModel: viewModel)
+                        SettingsView(viewModel: projectViewModel)
                     }
                 }
                 

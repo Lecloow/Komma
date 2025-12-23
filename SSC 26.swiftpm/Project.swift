@@ -13,11 +13,9 @@ struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
     var description: String
     var progress: Int {
         guard !subTasks.isEmpty else { return 0 }
-        
         let completedCount = subTasks.filter{ $0.isComplete }.count
         let totalCount = subTasks.count
-        
-        return Int((Double(completedCount) / Double(totalCount)) * 100)
+        return Int(((Double(completedCount) / Double(totalCount)) * 100).rounded())
     }
     var status: Status
     var priority: Priority

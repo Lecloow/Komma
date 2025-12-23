@@ -2,10 +2,12 @@ import SwiftUI
 
 @main
 struct MyApp: App {
-    @StateObject var model = ProjectViewModel()
+    @StateObject var projectViewModel = ProjectViewModel()
+    @StateObject var focusViewModel = FocusViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: model)
+            ContentView(projectViewModel: projectViewModel, focusViewModel: focusViewModel)
         }
     }
 }

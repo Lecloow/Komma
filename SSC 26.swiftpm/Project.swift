@@ -36,6 +36,7 @@ enum Priority: Codable {
 
 struct SubTask: Codable, Identifiable, Equatable {
     let id: Int
+    let projectId: Project.ID
     var title: String
     var isComplete: Bool
 }

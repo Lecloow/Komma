@@ -68,9 +68,9 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func completeSubTask(project: Project, subTask: SubTask) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
-                if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
+    func completeSubTask(subtask: SubTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+                if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subtask.id }) {
                     model.completeSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
                     loadProjects()
                 }
@@ -80,16 +80,16 @@ class ProjectViewModel: ObservableObject {
     func addSubTask(project: Project, title: String) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             let newId = (projects[index].subTasks.last?.id ?? 0) + 1
-            let subTask = SubTask(id: newId, title: title, isComplete: false)
+            let subTask = SubTask(id: newId, projectId: project.id, title: title, isComplete: false)
             model.addSubTasks(atIndex: index, project: project, subTask: subTask)
             loadProjects()
         }
     }
     
-    func updateSubTask(project: Project, subTask: SubTask) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
-            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
-                model.updateSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex, subTask: subTask)
+    func updateSubTask(subtask: SubTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subtask.id }) {
+                model.updateSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex, subTask: subtask)
                 loadProjects()
             }
         }

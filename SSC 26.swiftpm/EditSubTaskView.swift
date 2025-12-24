@@ -34,10 +34,10 @@ struct EditSubTaskView: View {
                         set: { newValue in
                             var updatedSubtask = subtask
                             updatedSubtask.title = newValue
-                            viewModel.updateSubTask(project: project!, subTask: updatedSubtask)
+                            viewModel.updateSubTask(subtask: updatedSubtask)
                         }
                     ))
-                    Button(action: { viewModel.completeSubTask(project: project!, subTask: subtask) }) { //TODO: add haptic and confetti
+                    Button(action: { viewModel.completeSubTask(subtask: subtask) }) { //TODO: add haptic and confetti
                         if #available(iOS 17.0, *) {
                             Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                                 .contentTransition(.symbolEffect(.replace))

@@ -28,7 +28,7 @@ struct SubTaskView: View {
         if subTask != nil && project != nil {
             HStack {
                 Text(subTask!.title)
-                Button(action: { viewModel.completeSubTask(project: project!, subTask: subTask!) }) { //FIXME: add haptic and confetti
+                Button(action: { viewModel.completeSubTask(subtask: subTask!) }) { //FIXME: add haptic and confetti
                     if #available(iOS 17.0, *) {
                         Image(systemName: subTask!.isComplete ? "checkmark.circle.fill" : "circle")
                             .contentTransition(.symbolEffect(.replace))

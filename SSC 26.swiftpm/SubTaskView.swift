@@ -25,7 +25,7 @@ struct SubTaskView: View {
     }
     
     var body: some View {
-        if subTask != nil && project != nil {
+        if subTask != nil {
             HStack {
                 Text(subTask!.title)
                 Button(action: { viewModel.completeSubTask(subtask: subTask!) }) { //FIXME: add haptic and confetti

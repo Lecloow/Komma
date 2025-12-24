@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import ConfettiSwiftUI
+
 
 struct ProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
@@ -24,6 +26,7 @@ struct ProjectView: View {
             subtasks
             Spacer()
         }
+        .confettiCannon(trigger: $viewModel.confettiCounter, num: 50, radius: 400)
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
             Button("Cancel", role: .cancel) { }
             Button("Delete Project", role: .destructive) {
@@ -89,33 +92,39 @@ struct ProjectInformation: View {
     }
     
     var status: some View {
-        switch project.status {
-        case .later:
-            badge("Later", color: .pink)
-        case .onHold:
-            badge("On hold", color: .red)
-        case .inProgress:
-            badge("In progress", color: .blue)
-        case .inReview:
-            badge("In review", color: .purple)
-        case .done:
-            badge("Done", color: .green)
+        HStack {
+            Text("Status: ")
+            switch project.status {
+            case .later:
+                badge("Later", color: .pink)
+            case .onHold:
+                badge("On hold", color: .red)
+            case .inProgress:
+                badge("In progress", color: .blue)
+            case .inReview:
+                badge("In review", color: .purple)
+            case .done:
+                badge("Done", color: .green)
+            }
         }
     }
     
     var priority: some View {
-        switch project.priority {
-        case .low:
-            badge("Low", color: .blue)
-        case .normal:
-            badge("Normal", color: .green)
-        case .high:
-            badge("High", color: .orange)
-        case .urgent:
-            badge("Urgent", color: .red)
+        HStack {
+            Text("Priority: ")
+            switch project.priority {
+            case .low:
+                badge("Low", color: .blue)
+            case .normal:
+                badge("Normal", color: .green)
+            case .high:
+                badge("High", color: .orange)
+            case .urgent:
+                badge("Urgent", color: .red)
+            }
         }
     }
-    
+    //FIXME: Ui is fade need waouh effect
     func badge(_ content: String, color: CustomColor) -> some View {
         BadgeView(content: content, color: color)
     }

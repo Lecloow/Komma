@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 
 class ProjectViewModel: ObservableObject {
     @Published private var model = createProjectModel()
+    @Published var confettiCounter = 0
     
     private static func createProjectModel() -> ProjectManager {
         ProjectManager()
@@ -73,6 +74,9 @@ class ProjectViewModel: ObservableObject {
                 if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subtask.id }) {
                     model.completeSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
                     loadProjects()
+                    if !subtask.isComplete {
+                        confettiCounter += 1
+                    }
                 }
         }
     }

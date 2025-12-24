@@ -19,37 +19,9 @@ struct ProjectView: View {
             Text(project.title)
                 .font(.largeTitle)
             Divider()
-            Text(project.description)
-            Text("\(project.deadline.formatted(date: .abbreviated, time: .omitted))")
-            switch project.status {
-            case .later:
-                Text("later").foregroundStyle(.gray)
-            case .onHold:
-                Text("on Hold").foregroundStyle(.red)
-            case .inProgress:
-                Text("in Progress").foregroundStyle(.blue)
-            case .inReview:
-                Text("In Review").foregroundStyle(.orange)
-            case .done:
-                Text("Done").foregroundStyle(.green)
-            }
-            
-            switch project.priority {
-            case .low:
-                Text("Low").foregroundStyle(.blue)
-            case .normal:
-                Text("Normal").foregroundStyle(.green)
-            case .high:
-                Text("High").foregroundStyle(.orange)
-            case .urgent:
-                Text("Urgent").foregroundStyle(.red)
-            }
-            //TODO: The Text is not supposed to be in Color but the back is. Color inspired from Notion (pastel)
-            Text("Progress: \(project.progress)")
+            ProjectInformation(project: project)
             Divider()
-            ForEach(project.subTasks) { subTask in
-                SubTaskView(viewModel: viewModel, projectId: project.id, subTaskId: subTask.id)
-            }
+            subtasks
             Spacer()
         }
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
@@ -62,31 +34,89 @@ struct ProjectView: View {
             Text("This will permanently delete the project. You can't undo this.")
         }
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
-                        Image(systemName: "square.and.pencil")
-                    }
-                    Menu {
-                        Button(role: .destructive) { isShowingDeletePopup = true } label: {
-                            Label("Delete Project", systemImage: "trash")
-                        }
-
-                        Button {
-                            // autre action
-                        } label: {
-                            Label("IDK", systemImage: "mappin")
-                        }
-
-                    } label: {
-                        Image(systemName: "gear")
-                    }
-                }
-            }
+            toolbar
         } //TODO: Button Delete etc...
         .multilineTextAlignment(.leading)
         .padding()
     }
+    
+    var subtasks: some View {
+        List {
+            ForEach(project.subTasks) { subTask in
+                SubTaskView(viewModel: viewModel, projectId:  project.id, subTaskId: subTask.id)
+                    //.listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets())
+            }
+        }
+        .listStyle(. plain)
+        .scrollContentBackground(.hidden)
+    }
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            HStack {
+                NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
+                    Image(systemName: "square.and.pencil")
+                }
+                Menu {
+                    Button(role: .destructive, action: { isShowingDeletePopup = true }) {
+                        Label("Delete Project", systemImage: "trash")
+                    }
+                    Button(action: { }) {
+                        Label("IDK", systemImage: "mappin")
+                    }
+                } label: {
+                    Image(systemName: "gear")
+                }
+            }
+        }
+    }
 }
-
 //FIXME: Clean this shit
+
+struct ProjectInformation: View {
+    var project: Project
+    
+    var body: some View {
+        Text(project.description)
+        Text("\(project.deadline.formatted(date: .abbreviated, time: .omitted))")
+        status
+        priority
+        Text("Progress: \(project.progress)%")
+        ProgressView(value: Double(project.progress)/100)
+            .tint(.primary)
+            .animation(.easeInOut, value: project.progress)
+    }
+    
+    var status: some View {
+        switch project.status {
+        case .later:
+            badge("Later", color: .pink)
+        case .onHold:
+            badge("On hold", color: .red)
+        case .inProgress:
+            badge("In progress", color: .blue)
+        case .inReview:
+            badge("In review", color: .purple)
+        case .done:
+            badge("Done", color: .green)
+        }
+    }
+    
+    var priority: some View {
+        switch project.priority {
+        case .low:
+            badge("Low", color: .blue)
+        case .normal:
+            badge("Normal", color: .green)
+        case .high:
+            badge("High", color: .orange)
+        case .urgent:
+            badge("Urgent", color: .red)
+        }
+    }
+    
+    func badge(_ content: String, color: CustomColor) -> some View {
+        BadgeView(content: content, color: color)
+    }
+}

@@ -32,8 +32,10 @@ struct SubTaskView: View {
                     if #available(iOS 17.0, *) {
                         Image(systemName: subTask!.isComplete ? "checkmark.circle.fill" : "circle")
                             .contentTransition(.symbolEffect(.replace))
+                            .tint(.primary)
                     } else {
                         Image(systemName: subTask!.isComplete ? "checkmark.circle.fill" : "circle")
+                            .tint(.primary)
                     }
                 }
             }

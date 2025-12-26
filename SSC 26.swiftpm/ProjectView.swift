@@ -26,7 +26,7 @@ struct ProjectView: View {
             subtasks
             Spacer()
         }
-        .confettiCannon(trigger: $viewModel.confettiCounter, num: 50, radius: 400)
+        .confettiCannon(trigger: $viewModel.confettiCounter)
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
             Button("Cancel", role: .cancel) { }
             Button("Delete Project", role: .destructive) {
@@ -47,7 +47,6 @@ struct ProjectView: View {
         List {
             ForEach(project.subTasks) { subTask in
                 SubTaskView(viewModel: viewModel, projectId:  project.id, subTaskId: subTask.id)
-                    //.listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
             }
         }

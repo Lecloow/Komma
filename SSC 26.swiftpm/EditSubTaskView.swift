@@ -7,48 +7,4 @@
 
 import SwiftUI
 
-struct EditSubTaskView: View {
-    @ObservedObject var viewModel: ProjectViewModel
-    @State var projectId: Int?
-    @State var subTaskId: SubTask.ID
-        
-    private var project: Project? {
-        guard let id = projectId else { return nil }
-        return viewModel.projects.first(where: { $0.id == id })
-    }
-    private var subtask: SubTask? {
-        if project != nil {
-            return project!.subTasks.first(where: { $0.id == subTaskId })
-        } else {
-            return nil
-        }
-    }
-    
-    var body: some View {
-        if project != nil {
-            if let subtask = subtask {
-                HStack {
-                    //Text(subTask!.title)
-                    TextField("Untitled Subtask", text: Binding(
-                        get: { subtask.title },
-                        set: { newValue in
-                            var updatedSubtask = subtask
-                            updatedSubtask.title = newValue
-                            viewModel.updateSubTask(subtask: updatedSubtask)
-                        }
-                    ))
-                    Button(action: { viewModel.completeSubTask(subtask: subtask) }) { //TODO: add haptic and confetti
-                        if #available(iOS 17.0, *) {
-                            Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
-                                .contentTransition(.symbolEffect(.replace))
-                                .tint(.primary)
-                        } else {
-                            Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
-                                .tint(.primary)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+

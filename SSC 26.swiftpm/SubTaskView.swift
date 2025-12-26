@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct subtaskView: View {
+struct SubtaskView: View {
     var mode: Mode
     @ObservedObject var viewModel: ProjectViewModel
     @State var projectId: Int?
@@ -83,4 +83,3 @@ extension View {
         modifier(TransformToSubtaskView(viewModel: viewModel, project: project, subtaskId: subtaskId))
     }
 }
-

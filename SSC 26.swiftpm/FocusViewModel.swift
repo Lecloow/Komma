@@ -7,7 +7,7 @@
 
 import Foundation
 
-/*@MainActor*/
+@MainActor
 class FocusViewModel: ObservableObject {
     @Published private var model = createFocusModel()
     

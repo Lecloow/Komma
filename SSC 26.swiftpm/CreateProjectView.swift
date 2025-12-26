@@ -36,7 +36,7 @@ struct CreateProjectView: View {
                     Divider()
                     EditProjectInformation(viewModel: viewModel, project: project)
                     Divider()
-                    EditSubTask(viewModel: viewModel, project: project)
+                    subtasks
                     Spacer()
                 }
                 .toolbar { toolbar }
@@ -52,6 +52,24 @@ struct CreateProjectView: View {
         }
     }
         
+    var subtasks: some View {
+        VStack(alignment: .leading) {
+            if let project = project {
+                Button(action: { viewModel.addSubTask(project: project, title: "") }) {
+                    Text("Add subtask")
+                }
+                List {
+                    ForEach(project.subTasks) { subTask in
+                        SubtaskView(mode: Mode.edit, viewModel: viewModel, projectId:  project.id, subTaskId: subTask.id)
+                            .listRowInsets(EdgeInsets())
+                    }
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(. hidden)
+            }
+        }
+    }
+    
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             if #available(iOS 26.0, *) {
@@ -128,29 +146,3 @@ struct EditProjectInformation: View {
         }
     }
 }
-
-struct EditSubTask: View {
-    @ObservedObject var viewModel: ProjectViewModel
-    var project: Project
-    
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Button(action: { viewModel.addSubTask(project: project, title: "Subtask") }) {
-                Text("Add subtask")
-            }
-            subtasks
-        }
-    }
-    var subtasks: some View {
-        List {
-            ForEach(project.subTasks) { subTask in
-                SubtaskView(mode: Mode.edit, viewModel: viewModel, projectId: project.id, subTaskId: subTask.id)
-                    .listRowInsets(EdgeInsets())
-            }
-        }
-        .listStyle(. plain)
-        .scrollContentBackground(.hidden)
-    }
-}
-//TODO: Create a ViewModifier Instead

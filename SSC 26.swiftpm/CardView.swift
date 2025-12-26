@@ -42,22 +42,22 @@ struct CardView: View {
 //TODO: Darkmode
 
 struct CircularProgressView: View {
-  let progress: CGFloat
-    let lineWidth: CGFloat = 5
+    let progress: CGFloat
+    let lineWidth: CGFloat = 3.5
     
-  var body: some View {
-    ZStack {
-      Circle()
-        .stroke(lineWidth: lineWidth)
-        .opacity(0.1)
-        .foregroundColor(.primary)
-
-      Circle()
-        .trim(from: 0.0, to: min(progress, 1.0))
-        .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
-        .foregroundColor(.primary)
-        .rotationEffect(Angle(degrees: 270.0))
-        .animation(.easeInOut, value: progress)
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(lineWidth: lineWidth)
+                .opacity(0.1)
+                .foregroundColor(.primary)
+            
+            Circle()
+                .trim(from: 0.0, to: min(progress, 1.0))
+                .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+                .foregroundColor(.primary)
+                .rotationEffect(Angle(degrees: 270.0))
+                .animation(.easeInOut, value: progress)
+        }
     }
-  }
 }

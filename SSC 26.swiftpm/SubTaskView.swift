@@ -7,28 +7,8 @@
 
 import SwiftUI
 
-struct SubTaskView: View {
-    @ObservedObject var viewModel: ProjectViewModel
-    @State var projectId: Int?
-    @State var subTaskId: SubTask.ID
-        
-    private var project: Project? {
-        guard let id = projectId else { return nil }
-        return viewModel.projects.first(where: { $0.id == id })
-    }
-    private var subTask: SubTask? {
-        return project?.subTasks.first(where: { $0.id == subTaskId })
-    }
-    
-    var body: some View {
-        if subTask != nil && project != nil {
-            Text(subTask!.title)
-                .transformToSubtaskView(viewModel: viewModel, project: project!, subtaskId: subTaskId)
-        }
-    }
-}
-
-struct EditSubTaskView: View {
+struct subtaskView: View {
+    var mode: Mode
     @ObservedObject var viewModel: ProjectViewModel
     @State var projectId: Int?
     @State var subTaskId: SubTask.ID
@@ -43,17 +23,31 @@ struct EditSubTaskView: View {
     
     var body: some View {
         if project != nil && subtask != nil{
-            TextField("Untitled Subtask", text: Binding(
-                get: { subtask!.title },
-                set: { newValue in
-                    var updatedSubtask = subtask!
-                    updatedSubtask.title = newValue
-                    viewModel.updateSubTask(subtask: updatedSubtask)
-                }
-            ))
-            .transformToSubtaskView(viewModel: viewModel, project: project!, subtaskId: subTaskId)
+            switch mode {
+            case .edit:
+                AnyView(
+                    TextField("Untitled Subtask", text: Binding(
+                        get: { subtask!.title },
+                        set: { newValue in
+                            var updatedSubtask = subtask!
+                            updatedSubtask.title = newValue
+                            viewModel.updateSubTask(subtask: updatedSubtask)
+                        }
+                    ))
+                    .transformToSubtaskView(viewModel: viewModel, project: project!, subtaskId: subTaskId)
+                )
+            case .view:
+                AnyView(
+                    Text(subtask!.title)
+                        .transformToSubtaskView(viewModel: viewModel, project: project!, subtaskId: subTaskId)
+                )
+            }
         }
     }
+}
+
+enum Mode {
+    case edit, view
 }
 
 struct TransformToSubtaskView: ViewModifier {
@@ -89,3 +83,4 @@ extension View {
         modifier(TransformToSubtaskView(viewModel: viewModel, project: project, subtaskId: subtaskId))
     }
 }
+

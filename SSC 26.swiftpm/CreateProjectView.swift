@@ -145,7 +145,7 @@ struct EditSubTask: View {
     var subtasks: some View {
         List {
             ForEach(project.subTasks) { subTask in
-                EditSubTaskView(viewModel: viewModel, projectId: project.id, subTaskId: subTask.id)
+                SubtaskView(mode: Mode.edit, viewModel: viewModel, projectId: project.id, subTaskId: subTask.id)
                     .listRowInsets(EdgeInsets())
             }
         }

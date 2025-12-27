@@ -61,14 +61,18 @@ struct ProjectView: View {
                     Image(systemName: "square.and.pencil")
                 }
                 Menu {
+                    NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
+                        Label("Edit Project", systemImage: "square.and.pencil")
+                    }
+                    Button(action: { }) { //TODO: Star or pin project
+                        Label("Add to favorites", systemImage: "plus")
+                    }
+                    Divider()
                     Button(role: .destructive, action: { isShowingDeletePopup = true }) {
                         Label("Delete Project", systemImage: "trash")
                     }
-                    Button(action: { }) {
-                        Label("IDK", systemImage: "mappin")
-                    }
                 } label: {
-                    Image(systemName: "gear")
+                    Image(systemName: "ellipsis")
                 }
             }
         }

@@ -61,7 +61,11 @@ struct CreateProjectView: View {
                         SubtaskView(mode: .edit, viewModel: viewModel, subtask: subTask)
                             .listRowInsets(EdgeInsets())
                     }
+                    .onMove { oldPosition, newPosition in
+                        viewModel.moveSubTask(in: project, from: oldPosition, to: newPosition)
+                    }
                 }
+                .environment(\.editMode, .constant(.active))
                 .listStyle(.plain)
                 .scrollContentBackground(. hidden)
             }

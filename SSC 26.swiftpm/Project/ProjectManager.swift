@@ -68,6 +68,11 @@ struct ProjectManager {
         saveProjects(projects)
     }
     
+    mutating func moveSubtask(atProjectIndex projectIndex: Int, from source: IndexSet, to destination: Int) {
+            projects[projectIndex].subtasks.move(fromOffsets: source, toOffset: destination)
+            saveProjects(projects)
+    }
+    
     mutating func deleteSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int) {
         projects[projectIndex].subtasks.remove(at: subtaskIndex)
         saveProjects(projects)

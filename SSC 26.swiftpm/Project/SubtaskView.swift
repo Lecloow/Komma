@@ -15,37 +15,33 @@ struct SubtaskView: View {
     var body: some View {
         switch mode {
         case .edit:
-            AnyView(
-                TextField("Untitled Subtask", text: Binding(
-                    get: { subtask.title },
-                    set: { newValue in
-                        var updatedSubtask = subtask
-                        updatedSubtask.title = newValue
-                        viewModel.updateSubtask(subtask: updatedSubtask)
-                    }
-                ))
+            TextField("Untitled Subtask", text: Binding(
+                get: { subtask.title },
+                set: { newValue in
+                    var updatedSubtask = subtask
+                    updatedSubtask.title = newValue
+                    viewModel.updateSubtask(subtask: updatedSubtask)
+                }
+            ))
+            .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    viewModel.deleteSubtask(subtask: subtask)
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+        case .view:
+            Text(subtask.title)
                 .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
                 .swipeActions(edge: .trailing) {
-                    Button(role: .destructive) {
-                        viewModel.deleteSubtask(subtask: subtask)
+                    Button {
+                        viewModel.completeSubtask(subtask: subtask)
                     } label: {
-                        Label("Delete", systemImage: "trash")
+                        Label(subtask.isComplete ? "Undo" : "Done", systemImage: subtask.isComplete ? "xmark" : "checkmark")
                     }
+                    .tint(subtask.isComplete ? .gray : .green)
                 }
-            )
-        case .view:
-            AnyView(
-                Text(subtask.title)
-                    .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
-                    .swipeActions(edge: .trailing) {
-                        Button() {
-                            viewModel.completeSubtask(subtask: subtask)
-                        } label: {
-                            Label(subtask.isComplete ? "Undo" : "Done", systemImage: "checkmark")
-                        }
-                        .tint(subtask.isComplete ? .gray : .green)
-                    }
-            )
         }
     }
 }
@@ -61,6 +57,7 @@ struct TransformToSubtaskView: ViewModifier {
     func body(content: Content) -> some View {
         HStack {
             content
+            Spacer()
             Button(action: { viewModel.completeSubtask(subtask: subtask) }) { //FIXME: add haptic and confetti
                 if #available(iOS 17.0, *) {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
@@ -73,6 +70,7 @@ struct TransformToSubtaskView: ViewModifier {
                         .tint(.primary)
                 }
             }
+            .padding(.horizontal)
         }
     }
 }

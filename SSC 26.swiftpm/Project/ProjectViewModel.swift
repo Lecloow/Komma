@@ -99,6 +99,13 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func moveSubTask(in project: Project, from source: IndexSet, to destination: Int) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
+            model.moveSubtask(atProjectIndex: projectIndex, from: source, to: destination)
+            loadProjects()
+        }
+    }
+    
     func deleteSubtask(subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
             if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {

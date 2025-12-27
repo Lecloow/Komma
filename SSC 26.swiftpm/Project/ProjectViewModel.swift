@@ -46,7 +46,7 @@ class ProjectViewModel: ObservableObject {
     
     func addProject(title: String, description: String, deadline: Date) {
         let newId = (projects.last?.id ?? 0) + 1
-        let project: Project = .init(id: newId, title: title, description: description, status:  Status.inProgress, priority: Priority.normal, subTasks: [], deadline: deadline)
+        let project: Project = .init(id: newId, title: title, description: description, status:  Status.inProgress, priority: Priority.normal, subtasks: [], deadline: deadline)
         model.addProject(project)
         loadProjects()
     }
@@ -69,10 +69,10 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func completeSubTask(subtask: SubTask) {
+    func completeSubtask(subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
-                if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subtask.id }) {
-                    model.completeSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
+                if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    model.completeSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex)
                     loadProjects()
                     if !subtask.isComplete {
                         confettiCounter += 1
@@ -81,28 +81,28 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func addSubTask(project: Project, title: String) {
+    func addSubtask(project: Project, title: String) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            let newId = (projects[index].subTasks.last?.id ?? 0) + 1
-            let subTask = SubTask(id: newId, projectId: project.id, title: title, isComplete: false)
-            model.addSubTasks(atIndex: index, project: project, subTask: subTask)
+            let newId = (projects[index].subtasks.last?.id ?? 0) + 1
+            let subtask = Subtask(id: newId, projectId: project.id, title: title, isComplete: false)
+            model.addSubtasks(atIndex: index, project: project, subtask: subtask)
             loadProjects()
         }
     }
     
-    func updateSubTask(subtask: SubTask) {
+    func updateSubtask(subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
-            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subtask.id }) {
-                model.updateSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex, subTask: subtask)
+            if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                model.updateSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex, subtask: subtask)
                 loadProjects()
             }
         }
     }
     
-    func deleteSubTask(project: Project, subTask: SubTask) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
-            if let subTaskIndex = projects[projectIndex].subTasks.firstIndex(where: { $0.id == subTask.id }) {
-                model.deleteSubTask(atProjectIndex: projectIndex, atSubTaskIndex: subTaskIndex)
+    func deleteSubtask(subtask: Subtask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+            if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                model.deleteSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex)
                 loadProjects()
             }
         }

@@ -28,30 +28,36 @@ struct ProjectView: View {
         }
         .confettiCannon(trigger: $viewModel.confettiCounter)
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete Project", role: .destructive) {
-                viewModel.delete(project: project)
-                dismiss()
-            }
+            alertContent
         } message: {
             Text("This will permanently delete the project. You can't undo this.")
         }
         .toolbar {
             toolbar
-        } //TODO: Button Delete etc...
+        }
         .multilineTextAlignment(.leading)
         .padding()
     }
     
     var subtasks: some View {
         List {
-            ForEach(project.subTasks) { subTask in
-                SubtaskView(mode: Mode.view, viewModel: viewModel, projectId:  project.id, subTaskId: subTask.id)
+            ForEach(project.subtasks) { subTask in
+                SubtaskView(mode: .view, viewModel: viewModel, subtask: subTask)
                     .listRowInsets(EdgeInsets())
             }
         }
         .listStyle(. plain)
         .scrollContentBackground(.hidden)
+    }
+    
+    var alertContent: some View {
+        HStack {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete Project", role: .destructive) {
+                viewModel.delete(project: project)
+                dismiss()
+            }
+        }
     }
     
     var toolbar: some ToolbarContent {
@@ -78,7 +84,6 @@ struct ProjectView: View {
         }
     }
 }
-//FIXME: Clean this shit
 
 struct ProjectInformation: View {
     var project: Project

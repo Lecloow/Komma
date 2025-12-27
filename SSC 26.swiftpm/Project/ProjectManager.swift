@@ -53,23 +53,23 @@ struct ProjectManager {
         saveProjects(projects)
     }
     
-    mutating func addSubTasks(atIndex index: Int, project: Project, subTask: SubTask) {
-        projects[index].subTasks.append(subTask)
+    mutating func addSubtasks(atIndex index: Int, project: Project, subtask: Subtask) {
+        projects[index].subtasks.append(subtask)
         saveProjects(projects)
     }
     
-    mutating func completeSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int) {
-        projects[projectIndex].subTasks[subTaskIndex].isComplete.toggle()
+    mutating func completeSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int) {
+        projects[projectIndex].subtasks[subtaskIndex].isComplete.toggle()
         saveProjects(projects)
     }
     
-    mutating func updateSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int, subTask: SubTask) {
-        projects[projectIndex].subTasks[subTaskIndex] = subTask
+    mutating func updateSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int, subtask: Subtask) {
+        projects[projectIndex].subtasks[subtaskIndex] = subtask
         saveProjects(projects)
     }
     
-    mutating func deleteSubTask(atProjectIndex projectIndex: Int, atSubTaskIndex subTaskIndex: Int) {
-        projects[projectIndex].subTasks.remove(at: subTaskIndex)
+    mutating func deleteSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int) {
+        projects[projectIndex].subtasks.remove(at: subtaskIndex)
         saveProjects(projects)
     }
     

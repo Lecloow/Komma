@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-//FIXME: Clean this code
-
 struct CreateProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @Environment(\.dismiss) private var dismiss
@@ -55,12 +53,12 @@ struct CreateProjectView: View {
     var subtasks: some View {
         VStack(alignment: .leading) {
             if let project = project {
-                Button(action: { viewModel.addSubTask(project: project, title: "") }) {
+                Button(action: { viewModel.addSubtask(project: project, title: "") }) {
                     Text("Add subtask")
                 }
                 List {
-                    ForEach(project.subTasks) { subTask in
-                        SubtaskView(mode: Mode.edit, viewModel: viewModel, projectId:  project.id, subTaskId: subTask.id)
+                    ForEach(project.subtasks) { subTask in
+                        SubtaskView(mode: .edit, viewModel: viewModel, subtask: subTask)
                             .listRowInsets(EdgeInsets())
                     }
                 }
@@ -73,19 +71,19 @@ struct CreateProjectView: View {
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             if #available(iOS 26.0, *) {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "checkmark")
-                }
+                button
                 .buttonStyle(.glassProminent)
-                .tint(.primary)
             } else {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "checkmark")
-                }
+                button
                 .buttonStyle(.borderedProminent)
-                .tint(.primary)
             }
         }
+    }
+    var button: some View {
+        Button(action: { dismiss() }) {
+            Image(systemName: "checkmark")
+        }
+        .tint(.primary)
     }
 }
 
@@ -103,7 +101,12 @@ struct EditProjectInformation: View {
                 viewModel.update(project: updatedProject)
             }
         ))
-        
+        date
+        status
+        priority
+    }
+    
+    var date: some View {
         DatePicker(
             "Deadline",
             selection: Binding(
@@ -116,7 +119,8 @@ struct EditProjectInformation: View {
             ),
             displayedComponents: [.date]
         )
-
+    }
+    var status: some View {
         Picker("Change Status", selection: Binding(
             get: { project.status },
             set: { newValue in
@@ -131,6 +135,8 @@ struct EditProjectInformation: View {
             Text("In Review").tag(Status.inReview)
             Text("Done").tag(Status.done)
         }
+    }
+    var priority: some View {
         Picker("Change Priority", selection: Binding(
             get: { project.priority },
             set: { newValue in

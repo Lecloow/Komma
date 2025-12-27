@@ -12,17 +12,17 @@ struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
     var title: String
     var description: String
     var progress: Int {
-        guard !subTasks.isEmpty else { return 0 }
-        let completedCount = subTasks.filter{ $0.isComplete }.count
-        let totalCount = subTasks.count
+        guard !subtasks.isEmpty else { return 0 }
+        let completedCount = subtasks.filter{ $0.isComplete }.count
+        let totalCount = subtasks.count
         return Int(((Double(completedCount) / Double(totalCount)) * 100).rounded())
     }
     var status: Status
     var priority: Priority
-    var subTasks: [SubTask]
+    var subtasks: [Subtask]
     var deadline: Date
     var debugDescription: String {
-        "\(id): title: \(title) \(description) \(progress), subTasks: \(subTasks)"
+        "\(id): title: \(title) \(description) \(progress), subTasks: \(subtasks)"
     }
 }
 
@@ -34,7 +34,7 @@ enum Priority: Codable {
     case low, normal, high, urgent //FIXME: CHange priority
 }
 
-struct SubTask: Codable, Identifiable, Equatable {
+struct Subtask: Codable, Identifiable, Equatable {
     let id: Int
     let projectId: Project.ID
     var title: String

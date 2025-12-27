@@ -36,7 +36,7 @@ struct FocusModel {
 
 
 struct Session {
-    var subtasks: [SubTask]
+    var subtasks: [Subtask]
     var isRunning = false
     var estimatedTime: Int = 0
     var timer: Timer?

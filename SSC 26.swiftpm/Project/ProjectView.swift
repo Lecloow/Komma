@@ -42,7 +42,7 @@ struct ProjectView: View {
     var subtasks: some View {
         List {
             ForEach(project.subtasks) { subTask in
-                SubtaskView(mode: .view, viewModel: viewModel, subtask: subTask)
+                SubtaskView(viewModel: viewModel, subtask: subTask)
                     .listRowInsets(EdgeInsets())
             }
         }

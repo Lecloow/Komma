@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SubtaskView: View {
-    var mode: Mode
+    var mode: Mode = .view
     @ObservedObject var viewModel: ProjectViewModel
-    var subtask: Subtask
+    let subtask: Subtask
         
     var body: some View {
         switch mode {
@@ -52,7 +52,7 @@ enum Mode {
 
 struct TransformToSubtaskView: ViewModifier {
     @ObservedObject var viewModel: ProjectViewModel
-    var subtask: Subtask
+    let subtask: Subtask
     
     func body(content: Content) -> some View {
         HStack {

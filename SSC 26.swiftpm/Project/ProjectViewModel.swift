@@ -72,9 +72,10 @@ class ProjectViewModel: ObservableObject {
     func completeSubtask(subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
                 if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    let wasComplete = subtask.isComplete
                     model.completeSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex)
                     loadProjects()
-                    if !subtask.isComplete {
+                    if !wasComplete && projects[projectIndex].subtasks[subtaskIndex].isComplete { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
                         confettiCounter += 1
                     }
                 }

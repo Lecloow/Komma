@@ -39,7 +39,6 @@ struct CardView: View {
     }
 }
 //TODO: Darkmode
-//TODO: On Hold
 
 struct CircularProgressView: View {
     let progress: CGFloat

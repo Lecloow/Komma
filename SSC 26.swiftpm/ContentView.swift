@@ -19,19 +19,20 @@ struct ContentView: View {
                     }
                 }
                 
-                Tab("Today", systemImage: "message") {
-                    NavigationStack {
-                        Text("2")
-                    }
-                }
+//                Tab("Today", systemImage: "message") {
+//                    NavigationStack {
+//                        Text("2")
+//                    }
+//                }
+//                
+//                Tab("Calendar", systemImage: "calendar") {
+//                    NavigationStack {
+//                        Text("3")
+//                    }
+//                }
+                //TODO: If I have the time
                 
-                Tab("Calendar", systemImage: "calendar") {
-                    NavigationStack {
-                        Text("3")
-                    }
-                }
-                
-                Tab("Settings", systemImage: "person.crop.circle") {
+                Tab("Settings", systemImage: "gear") {
                     NavigationStack {
                         SettingsView(viewModel: projectViewModel)
                     }

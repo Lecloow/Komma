@@ -42,6 +42,10 @@ class ProjectViewModel: ObservableObject {
         model.importProjects(from: url)
     }
     
+    func createDemo() {
+        
+    }
+    
     //MARK: - User Intents
     
     func addProject(title: String, description: String, deadline: Date) {

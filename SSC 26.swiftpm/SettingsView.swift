@@ -11,10 +11,14 @@ struct SettingsView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @State var showImporter = false
     @State var isShowingResetPopup = false
+    @AppStorage("isFirstUse") var isFirstUse = true
     
     var body: some View {
         VStack {
             List {
+                Button("Show Introduction") {
+                    isFirstUse = true
+                }
                 Button("Export Projects") {
                     if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                        let root = scene.windows.first?.rootViewController {

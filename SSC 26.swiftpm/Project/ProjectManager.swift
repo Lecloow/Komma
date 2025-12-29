@@ -53,28 +53,38 @@ struct ProjectManager {
         saveProjects(projects)
     }
     
-    mutating func addSubtasks(atIndex index: Int, project: Project, subtask: Subtask) {
-        projects[index].subtasks.append(subtask)
+    mutating func addTask(_ task: ProjectTask, atProjectIndex index: Int) {
+        projects[index].tasks.append(task)
         saveProjects(projects)
     }
     
-    mutating func completeSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int) {
-        projects[projectIndex].subtasks[subtaskIndex].isComplete.toggle()
+    mutating func updateTask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, task: ProjectTask) {
+        projects[projectIndex].tasks[taskIndex] = task
         saveProjects(projects)
     }
     
-    mutating func updateSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int, subtask: Subtask) {
-        projects[projectIndex].subtasks[subtaskIndex] = subtask
+    mutating func addSubtasks(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, subtask: Subtask) {
+        projects[projectIndex].tasks[taskIndex].subtasks.append(subtask)
         saveProjects(projects)
     }
     
-    mutating func moveSubtask(atProjectIndex projectIndex: Int, from source: IndexSet, to destination: Int) {
-            projects[projectIndex].subtasks.move(fromOffsets: source, toOffset: destination)
+    mutating func completeSubtask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, atSubtaskIndex subtaskIndex: Int) {
+        projects[projectIndex].tasks[taskIndex].subtasks[subtaskIndex].isComplete.toggle()
+        saveProjects(projects)
+    }
+    
+    mutating func updateSubtask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, atSubtaskIndex subtaskIndex: Int, subtask: Subtask) {
+        projects[projectIndex].tasks[taskIndex].subtasks[subtaskIndex] = subtask
+        saveProjects(projects)
+    }
+    
+    mutating func moveSubtask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, from source: IndexSet, to destination: Int) {
+        projects[projectIndex].tasks[taskIndex].subtasks.move(fromOffsets: source, toOffset: destination)
             saveProjects(projects)
     }
     
-    mutating func deleteSubtask(atProjectIndex projectIndex: Int, atSubtaskIndex subtaskIndex: Int) {
-        projects[projectIndex].subtasks.remove(at: subtaskIndex)
+    mutating func deleteSubtask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, atSubtaskIndex subtaskIndex: Int) {
+        projects[projectIndex].tasks[taskIndex].subtasks.remove(at: subtaskIndex)
         saveProjects(projects)
     }
     

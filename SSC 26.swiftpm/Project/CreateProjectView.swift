@@ -34,7 +34,7 @@ struct CreateProjectView: View {
                     Divider()
                     EditProjectInformation(viewModel: viewModel, project: project)
                     Divider()
-                    subtasks
+                    tasks
                     Spacer()
                 }
                 .toolbar { toolbar }
@@ -50,24 +50,26 @@ struct CreateProjectView: View {
         }
     }
         
-    var subtasks: some View {
+    var tasks: some View {
         VStack(alignment: .leading) {
             if let project = project {
-                Button(action: { viewModel.addSubtask(project: project, title: "") }) {
-                    Text("Add subtask")
+                NavigationLink(destination: CreateTaskView(viewModel: viewModel, project: project)) {
+                    HStack {
+                        Image(systemName: "plus.app")
+                            .font(Font.system(size: 20))
+                        Text("New Task")
+                    }
+                    .tint(.primary)
                 }
                 List {
-                    ForEach(project.subtasks) { subTask in
-                        SubtaskView(mode: .edit, viewModel: viewModel, subtask: subTask)
+                    ForEach(project.tasks) { task in
+                        CardForTaskView(mode: .edit, viewModel: viewModel, task: task, project: project)
+                            .tint(.primary)
                             .listRowInsets(EdgeInsets())
                     }
-                    .onMove { oldPosition, newPosition in
-                        viewModel.moveSubTask(in: project, from: oldPosition, to: newPosition)
-                    }
                 }
-                .environment(\.editMode, .constant(.active))
-                .listStyle(.plain)
-                .scrollContentBackground(. hidden)
+                .listStyle(. plain)
+                .scrollContentBackground(.hidden)
             }
         }
     }

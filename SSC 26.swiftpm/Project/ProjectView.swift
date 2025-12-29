@@ -23,7 +23,7 @@ struct ProjectView: View {
             Divider()
             ProjectInformation(project: project)
             Divider()
-            subtasks
+            tasks
             Spacer()
         }
         .confettiCannon(trigger: $viewModel.confettiCounter)
@@ -39,10 +39,10 @@ struct ProjectView: View {
         .padding()
     }
     
-    var subtasks: some View {
+    var tasks: some View {
         List {
-            ForEach(project.subtasks) { subTask in
-                SubtaskView(viewModel: viewModel, subtask: subTask)
+            ForEach(project.tasks) { task in
+                CardForTaskView(viewModel: viewModel, task: task, project: project)
                     .listRowInsets(EdgeInsets())
             }
         }

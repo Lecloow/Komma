@@ -46,7 +46,7 @@ class ProjectViewModel: ObservableObject {
     
     func addProject(title: String, description: String, deadline: Date) {
         let newId = (projects.last?.id ?? 0) + 1
-        let project: Project = .init(id: newId, title: title, description: description, status:  Status.inProgress, priority: Priority.normal, subtasks: [], deadline: deadline)
+        let project: Project = .init(id: newId, title: title, description: description, status:  Status.inProgress, priority: Priority.normal, tasks: [], deadline: deadline)
         model.addProject(project)
         loadProjects()
     }
@@ -69,49 +69,77 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func completeSubtask(subtask: Subtask) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
-                if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
-                    let wasComplete = subtask.isComplete
-                    model.completeSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex)
-                    loadProjects()
-                    if !wasComplete && projects[projectIndex].subtasks[subtaskIndex].isComplete { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
-                        confettiCounter += 1
-                    }
-                }
-        }
-    }
-    
-    func addSubtask(project: Project, title: String) {
+    func addTask(project: Project, title: String, description: String, deadline: Date) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
-            let newId = (projects[index].subtasks.last?.id ?? 0) + 1
-            let subtask = Subtask(id: newId, projectId: project.id, title: title, isComplete: false)
-            model.addSubtasks(atIndex: index, project: project, subtask: subtask)
+            let newId = (projects[index].tasks.last?.id ?? 0) + 1
+            let task = ProjectTask(id: newId, projectId: project.id, title: title, description: description, deadline: deadline, subtasks: [])
+            model.addTask(task, atProjectIndex: index)
             loadProjects()
         }
     }
     
-    func updateSubtask(subtask: Subtask) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
-            if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
-                model.updateSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex, subtask: subtask)
+    func updateTask(task: ProjectTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                model.updateTask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, task: task)
                 loadProjects()
             }
         }
     }
     
-    func moveSubTask(in project: Project, from source: IndexSet, to destination: Int) {
-        if let projectIndex = projects.firstIndex(where: { $0.id == project.id }) {
-            model.moveSubtask(atProjectIndex: projectIndex, from: source, to: destination)
-            loadProjects()
+    func addSubtask(task: ProjectTask, title: String) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                let newId = (projects[projectIndex].tasks[taskIndex].subtasks.last?.id ?? 0) + 1
+                let subtask = Subtask(id: newId, projectId: task.projectId, taskId: task.id, title: title, isComplete: false)
+                model.addSubtasks(atProjectIndex: projectIndex, atTaskIndex: taskIndex, subtask: subtask)
+                loadProjects()
+            }
+        }
+    }
+    
+    func completeSubtask(subtask: Subtask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
+                if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    let wasComplete = subtask.isComplete
+                    model.completeSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, atSubtaskIndex: subtaskIndex)
+                    loadProjects()
+                    if !wasComplete && projects[projectIndex].tasks[taskIndex].subtasks[subtaskIndex].isComplete { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
+                        confettiCounter += 1
+                    }
+                }
+            }
+        }
+    }
+    
+    func updateSubtask(subtask: Subtask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
+                if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    model.updateSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, atSubtaskIndex: subtaskIndex, subtask: subtask)
+                    loadProjects()
+                }
+            }
+        }
+    }
+    
+    func moveSubTask(in task: ProjectTask, from source: IndexSet, to destination: Int) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                model.moveSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, from: source, to: destination)
+                loadProjects()
+            }
         }
     }
     
     func deleteSubtask(subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
-            if let subtaskIndex = projects[projectIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
-                model.deleteSubtask(atProjectIndex: projectIndex, atSubtaskIndex: subtaskIndex)
-                loadProjects()
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
+                if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    model.deleteSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, atSubtaskIndex: subtaskIndex)
+                    loadProjects()
+                }
             }
         }
     }

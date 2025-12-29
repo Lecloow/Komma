@@ -24,13 +24,6 @@ struct SubtaskView: View {
                 }
             ))
             .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
-            .swipeActions(edge: .trailing) {
-                Button(role: .destructive) {
-                    viewModel.deleteSubtask(subtask: subtask)
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
         case .view:
             Text(subtask.title)
                 .transformToSubtaskView(viewModel: viewModel, subtask: subtask)

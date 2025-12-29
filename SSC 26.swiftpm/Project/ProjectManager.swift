@@ -63,6 +63,11 @@ struct ProjectManager {
         saveProjects(projects)
     }
     
+    mutating func deleteTask(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int) {
+        projects[projectIndex].tasks.remove(at: taskIndex)
+        saveProjects(projects)
+    }
+    
     mutating func addSubtasks(atProjectIndex projectIndex: Int, atTaskIndex taskIndex: Int, subtask: Subtask) {
         projects[projectIndex].tasks[taskIndex].subtasks.append(subtask)
         saveProjects(projects)
@@ -129,4 +134,3 @@ struct ProjectManager {
         }
     }
 }
-//FIXME: Clean up this code

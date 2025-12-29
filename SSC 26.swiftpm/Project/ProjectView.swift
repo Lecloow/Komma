@@ -44,6 +44,11 @@ struct ProjectView: View {
             ForEach(project.tasks) { task in
                 CardForTaskView(viewModel: viewModel, task: task, project: project)
                     .listRowInsets(EdgeInsets())
+                    .contextMenu {
+                        NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: task.projectId)) {
+                            Label("Edit Task", systemImage: "square.and.pencil")
+                        }
+                    }
             }
         }
         .listStyle(. plain)

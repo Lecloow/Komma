@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateProjectView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @Environment(\.dismiss) private var dismiss
+    @State var isShowingDeletePopup = false
     
     @State var projectId: Project.ID?
         
@@ -42,6 +43,11 @@ struct CreateProjectView: View {
                 .padding()
             }
         }
+        .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
+            alertContent
+        } message: {
+            Text("This will permanently delete the project. You can't undo this.")
+        }
         .onAppear {
             if projectId == nil {
                 viewModel.addProject(title: "", description: "", deadline: Date())
@@ -53,7 +59,7 @@ struct CreateProjectView: View {
     var tasks: some View {
         VStack(alignment: .leading) {
             if let project = project {
-                NavigationLink(destination: CreateTaskView(viewModel: viewModel, project: project)) {
+                NavigationLink(destination: CreateTaskView(viewModel: viewModel, projectId: project.id)) {
                     HStack {
                         Image(systemName: "plus.app")
                             .font(Font.system(size: 20))
@@ -66,6 +72,11 @@ struct CreateProjectView: View {
                         CardForTaskView(mode: .edit, viewModel: viewModel, task: task, project: project)
                             .tint(.primary)
                             .listRowInsets(EdgeInsets())
+                            .contextMenu {
+                                NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: task.projectId)) {
+                                    Label("Edit Task", systemImage: "square.and.pencil")
+                                }
+                            }
                     }
                 }
                 .listStyle(. plain)
@@ -74,20 +85,37 @@ struct CreateProjectView: View {
         }
     }
     
-    var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            if #available(iOS 26.0, *) {
-                button
-                .buttonStyle(.glassProminent)
-            } else {
-                button
-                .buttonStyle(.borderedProminent)
+    var alertContent: some View {
+        HStack {
+            Button("Cancel", role: .cancel) { }
+            if let project = project {
+                Button("Delete Project", role: .destructive) {
+                    viewModel.delete(project: project)
+                    dismiss()
+                }
             }
         }
     }
-    var button: some View {
-        Button(action: { dismiss() }) {
-            Image(systemName: "checkmark")
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            HStack {
+                if #available(iOS 26.0, *) {
+                    buttons.buttonStyle(.glassProminent)
+                } else {
+                    buttons.buttonStyle(.borderedProminent)
+                }
+            }
+        }
+    }
+    var buttons: some View {
+        HStack {
+            Button(role: .destructive, action: { isShowingDeletePopup = true }) {
+                Label("Delete Project", systemImage: "trash")
+            }
+            Button(action: { dismiss() }) {
+                Image(systemName: "checkmark")
+            }
         }
         .tint(.primary)
     }

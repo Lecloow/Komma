@@ -55,5 +55,5 @@ enum Status: Codable {
 }
 
 enum Priority: Codable {
-    case low, normal, high, urgent //FIXME: CHange priority
+    case low, normal, high, urgent //FIXME: Change priority
 }

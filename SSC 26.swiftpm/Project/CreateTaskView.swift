@@ -10,12 +10,14 @@ import SwiftUI
 struct CreateTaskView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @Environment(\.dismiss) private var dismiss
+    @State var isShowingDeletePopup = false
+
     
     @State var taskId: ProjectTask.ID?
-    var project: Project
+    var projectId: Project.ID
     
     var projectIndex: Int? {
-        viewModel.projects.firstIndex(where: { $0.id == project.id})
+        viewModel.projects.firstIndex(where: { $0.id == projectId})
     }
     
     private var task: ProjectTask? {
@@ -43,18 +45,22 @@ struct CreateTaskView: View {
                     Divider()
                     EditTaskInformation(viewModel: viewModel, task: task)
                     Divider()
-                    Divider()
                     subtasks
                     Spacer()
                 }
-                //.toolbar { toolbar }
                 .multilineTextAlignment(.leading)
                 .padding()
+                .toolbar { toolbar }
             }
+        }
+        .alert("Delete Task ?", isPresented: $isShowingDeletePopup) {
+            alertContent
+        } message: {
+            Text("This will permanently delete the task. You can't undo this.")
         }
         .onAppear {
             if taskId == nil {
-                viewModel.addTask(project: project, title: "", description: "", deadline: Date())
+                viewModel.addTask(projectId: projectId, title: "", description: "", deadline: Date())
                 if let index = projectIndex {
                     taskId = viewModel.projects[index].tasks.last?.id
                 }
@@ -89,6 +95,40 @@ struct CreateTaskView: View {
                 .scrollContentBackground(. hidden)
             }
         }
+    }
+    
+    var alertContent: some View {
+        HStack {
+            Button("Cancel", role: .cancel) { }
+            if let task = task {
+                Button("Delete Task", role: .destructive) {
+                    viewModel.deleteTask(task)
+                    dismiss()
+                }
+            }
+        }
+    }
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            HStack {
+                if #available(iOS 26.0, *) {
+                    buttons.buttonStyle(.glassProminent)
+                } else {
+                    buttons.buttonStyle(.borderedProminent)
+                }
+            }
+        }
+    }
+    var buttons: some View {
+        HStack {
+            Button(role: .destructive, action: { isShowingDeletePopup = true }) {
+                Label("Delete Task", systemImage: "trash")
+            }
+            Button(action: { dismiss() }) {
+                Image(systemName: "checkmark")
+            }
+        }
+        .tint(.primary)
     }
 }
 

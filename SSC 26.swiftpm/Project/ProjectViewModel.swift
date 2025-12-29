@@ -69,10 +69,10 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func addTask(project: Project, title: String, description: String, deadline: Date) {
-        if let index = projects.firstIndex(where: { $0.id == project.id }) {
+    func addTask(projectId: Project.ID, title: String, description: String, deadline: Date) {
+        if let index = projects.firstIndex(where: { $0.id == projectId }) {
             let newId = (projects[index].tasks.last?.id ?? 0) + 1
-            let task = ProjectTask(id: newId, projectId: project.id, title: title, description: description, deadline: deadline, subtasks: [])
+            let task = ProjectTask(id: newId, projectId: projectId, title: title, description: description, deadline: deadline, subtasks: [])
             model.addTask(task, atProjectIndex: index)
             loadProjects()
         }
@@ -82,6 +82,15 @@ class ProjectViewModel: ObservableObject {
         if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
                 model.updateTask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, task: task)
+                loadProjects()
+            }
+        }
+    }
+    
+    func deleteTask(_ task: ProjectTask) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
+                model.deleteTask(atProjectIndex: projectIndex, atTaskIndex: taskIndex)
                 loadProjects()
             }
         }

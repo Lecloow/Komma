@@ -11,21 +11,26 @@ struct SubtaskView: View {
     var mode: Mode = .view
     @ObservedObject var viewModel: ProjectViewModel
     let subtask: Subtask
+    @State var isShowingPopup = false
+
         
     var body: some View {
-        switch mode {
-        case .edit:
-            TextField("Untitled Subtask", text: Binding(
-                get: { subtask.title },
-                set: { newValue in
-                    var updatedSubtask = subtask
-                    updatedSubtask.title = newValue
-                    viewModel.updateSubtask(subtask: updatedSubtask)
+        VStack {
+            switch mode {
+            case .edit:
+                TextField("Untitled Subtask", text: Binding(
+                    get: { subtask.title },
+                    set: { newValue in
+                        var updatedSubtask = subtask
+                        updatedSubtask.title = newValue
+                        viewModel.updateSubtask(subtask: updatedSubtask)
+                    }
+                ))
+                .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
+            case .view:
+                Button(action: { isShowingPopup = true }) {
+                    Text(subtask.title)
                 }
-            ))
-            .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
-        case .view:
-            Text(subtask.title)
                 .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
                 .swipeActions(edge: .trailing) {
                     Button {
@@ -35,6 +40,11 @@ struct SubtaskView: View {
                     }
                     .tint(subtask.isComplete ? .gray : .green)
                 }
+            }
+        }
+        .sheet(isPresented: $isShowingPopup) {
+            Text(subtask.title)
+                .presentationDetents([.medium, .large])
         }
     }
 }
@@ -51,18 +61,18 @@ struct TransformToSubtaskView: ViewModifier {
         HStack {
             content
             Spacer()
-            Button(action: { viewModel.completeSubtask(subtask: subtask) }) { //FIXME: add haptic and confetti
+            Button(action: { viewModel.completeSubtask(subtask: subtask) }) {
                 if #available(iOS 17.0, *) {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                         .contentTransition(.symbolEffect(.replace))
                         .tint(.primary)
-//                        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: viewModel.confettiCounter)
                         .sensoryFeedback(.success, trigger: viewModel.confettiCounter)
                 } else {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                         .tint(.primary)
                 }
             }
+            .buttonStyle(.plain)
             .padding(.horizontal)
         }
     }

@@ -1,6 +1,6 @@
 //
 //  CreateProjectView.swift
-//  SSC 26
+//  Kómma
 //
 //  Created by Thomas Conchon on 12/16/25.
 //

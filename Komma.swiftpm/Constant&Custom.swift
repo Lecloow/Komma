@@ -1,11 +1,9 @@
 //
 //  Constant&Custom.swift
-//  SSC 26
+//  Kómma
 //
 //  Created by Thomas Conchon on 12/24/25.
 //
-
-import Foundation
 import SwiftUI
 
 struct BadgeView: View {

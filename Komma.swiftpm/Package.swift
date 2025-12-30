@@ -8,19 +8,19 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "Komma",
+    name: "Kómma",
     platforms: [
         .iOS("16.0")
     ],
     products: [
         .iOSApplication(
-            name: "Komma",
+            name: "Kómma",
             targets: ["AppModule"],
-            bundleIdentifier: "com.thomasconchon.Komma",
+            bundleIdentifier: "com.thomasconchon.komma",
             teamIdentifier: "66DL9V5NKK",
             displayVersion: "1.0",
             bundleVersion: "1",
-            appIcon: .placeholder(icon: .bicycle),
+            appIcon: .placeholder(icon: .flower),
             accentColor: .presetColor(.blue),
             supportedDeviceFamilies: [
                 .pad,
@@ -45,5 +45,6 @@ let package = Package(
             ],
             path: "."
         )
-    ]
+    ],
+    swiftLanguageVersions: [.version("6")]
 )

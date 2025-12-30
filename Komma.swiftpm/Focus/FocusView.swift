@@ -1,6 +1,6 @@
 //
 //  FocusView.swift
-//  SSC 26
+//  Kómma
 //
 //  Created by Thomas Conchon on 12/22/25.
 //

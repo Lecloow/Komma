@@ -1,6 +1,6 @@
 //
 //  CardView.swift
-//  SSC 26
+//  Kómma
 //
 //  Created by Thomas Conchon on 12/8/25.
 //

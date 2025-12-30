@@ -1,6 +1,6 @@
 //
 //  HomeView.swift
-//  SSC 26
+//  Kómma
 //
 //  Created by Thomas Conchon on 12/4/25.
 //

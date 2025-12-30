@@ -12,27 +12,17 @@ struct SettingsView: View {
     @State var showImporter = false
     @State var isShowingResetPopup = false
     @AppStorage("isFirstUse") var isFirstUse = true
+    @State var isShowingAboutSheet = false
     
     var body: some View {
         VStack {
             List {
-                Button("Show Introduction") {
-                    isFirstUse = true
-                }
-                Button("Export Projects") {
-                    if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let root = scene.windows.first?.rootViewController {
-                        viewModel.exportProjects(viewModel.projects, from: root)
-                    }
-                }
-                Button("Import Projects") {
-                    showImporter = true
-                }
-                Button("Delete All Projects") {
-                    isShowingResetPopup = true
-                }
-                .foregroundStyle(.red)
+                aboutSection
+                importantSection
             }
+        }
+        .sheet(isPresented: $isShowingAboutSheet) {
+            aboutText.presentationDetents([.medium, .large])
         }
         .alert("Delete All Projects ?", isPresented: $isShowingResetPopup) {
             Button("Cancel", role: .cancel) { }
@@ -50,5 +40,39 @@ struct SettingsView: View {
                 viewModel.loadProjects()
             }
         }
+    }
+    var importantSection: some View {
+        Section {
+            Button("Show Introduction") {
+                isFirstUse = true
+            }
+            Button("Export Projects") {
+                if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let root = scene.windows.first?.rootViewController {
+                    viewModel.exportProjects(viewModel.projects, from: root)
+                }
+            }
+            Button("Import Projects") {
+                showImporter = true
+            }
+            Button("Delete All Projects") {
+                isShowingResetPopup = true
+            }
+            .foregroundStyle(.red)
+        }
+    }
+    var aboutSection: some View {
+        Section {
+            Button(action: { isShowingAboutSheet = true }) {
+                Text("About the app")
+            }
+            Link(destination: URL(string: "https://github.com/Lecloow/SSC")!) {
+                Label("Learn more on GitHub", systemImage: "arrow.up.right.square")
+            }//FIXME: The link will change in the futur
+            
+        }
+    }
+    var aboutText: some View {
+        Text("Kómma was created by Thomas Conchon for the 2026 Swift Student Challenge.")
     }
 }

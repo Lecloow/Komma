@@ -146,6 +146,7 @@ struct EditTaskInformation: View {
             }
         ))
         date
+        progress
     }
     
     var date: some View {
@@ -162,4 +163,12 @@ struct EditTaskInformation: View {
             displayedComponents: [.date]
         )
     }
+    var progress: some View {
+            VStack(alignment: .leading) {
+                Text("Progress: \(task.progress)%")
+                ProgressView(value: Double(task.progress)/100)
+                    .tint(.primary)
+                    .animation(.easeInOut, value: task.progress)
+            }
+        }
 }

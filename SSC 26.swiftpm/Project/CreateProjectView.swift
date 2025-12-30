@@ -138,7 +138,6 @@ struct EditProjectInformation: View {
         date
         status
         priority
-        progress
     }
     
     var date: some View {
@@ -184,14 +183,6 @@ struct EditProjectInformation: View {
             Text("Normal").tag(Priority.normal)
             Text("High").tag(Priority.high)
             Text("Urgent").tag(Priority.urgent)
-        }
-    }
-    var progress: some View {
-        VStack(alignment: .leading) {
-            Text("Progress: \(project.progress)%")
-            ProgressView(value: Double(project.progress)/100)
-                .tint(.primary)
-                .animation(.easeInOut, value: project.progress)
         }
     }
 }

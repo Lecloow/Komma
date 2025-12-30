@@ -8,17 +8,17 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "SSC 26",
+    name: "Kómma",
     platforms: [
         .iOS("16.0")
     ],
     products: [
         .iOSApplication(
-            name: "SSC 26",
+            name: "Kómma",
             targets: ["AppModule"],
             bundleIdentifier: "com.thomasconchon.SSC-26",
             teamIdentifier: "66DL9V5NKK",
-            displayVersion: "1.0",
+            displayVersion: "0.5",
             bundleVersion: "1",
             appIcon: .placeholder(icon: .mic),
             accentColor: .presetColor(.blue),

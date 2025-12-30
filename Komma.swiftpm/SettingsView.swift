@@ -66,9 +66,9 @@ struct SettingsView: View {
             Button(action: { isShowingAboutSheet = true }) {
                 Text("About the app")
             }
-            Link(destination: URL(string: "https://github.com/Lecloow/SSC")!) {
+            Link(destination: URL(string: "https://github.com/Lecloow/Komma")!) {
                 Label("Learn more on GitHub", systemImage: "arrow.up.right.square")
-            }//FIXME: The link will change in the futur
+            }
             
         }
     }

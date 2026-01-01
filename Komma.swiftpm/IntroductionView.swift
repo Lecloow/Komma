@@ -13,24 +13,30 @@ struct IntroductionView: View {
     var body: some View {
         VStack {
             RoundedCornerShape(radius: 50, corners: [.bottomLeft, .bottomRight])
-                .foregroundStyle(.green)
+                .foregroundStyle(Color(hex:"#0060d6")) //a beautiful green (2e9f84) or 0060d6 (blue)
                 .ignoresSafeArea()
                 .overlay(/*alignment: .leading*/ ) {
                     VStack(alignment: .leading) {
                         HStack {
                             Spacer()
-                            Color.red.frame(width: 300, height: 300) // Animated Logo
+                            Color.red.frame(width: 300, height: 300) //TODO: Animated Logo
                             Spacer()
                         }
                         Group {
-                            Text("Logo & Kómma")
-                                .font(.title)
+                            HStack {
+                                //Image(systemName: "apple.logo") //TODO: Little logo
+                                Text("Kómma")
+                            }
+                                .font(.system(.title, design: .rounded))
+                                .fontWeight(.semibold)
                                 .padding(.top)
                             Text("The app to help you focus on work")
-                                .font(.largeTitle)
+                                .font(.system(.largeTitle, design: .rounded))
+                                .fontWeight(.semibold)
                             Text("Description: blakaldbk bdjqdjb ss dvjdjqkddid sgdksdgdshs ddssgdisdifndjfb dhfdihf")
                                 .font(.title3)
                         }
+                        .foregroundStyle(.white)
                         .padding(.vertical, 1)
                         .padding(.horizontal)
                     }
@@ -56,7 +62,8 @@ struct IntroductionView: View {
         }
     }
     var button: some View {
-        Button(action: { isFirstUse = false }) {
+        //NavigationLink(destination: IntroductionCarrousel()) {
+        Button(action: { isFirstUse = false }) { //TODO: IntroductionCarrousel
             Text("Let's get started")
                 .font(.title2)
                 .frame(height: 35)

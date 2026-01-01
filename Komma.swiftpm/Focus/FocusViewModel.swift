@@ -15,6 +15,9 @@ class FocusViewModel: ObservableObject {
         FocusModel()
     }
     
+    var sessions: [Session] {
+        model.sessions
+    }
     var session: Session {
         model.session
     }
@@ -28,10 +31,8 @@ class FocusViewModel: ObservableObject {
 //    }
     
     private var timer: Timer?
-        
-    // MARK: - Accès en lecture pour la View
-    
-    // MARK: - Intent(s)
+            
+    // MARK: - User Intent(s)
     func startSession() {
         guard !session.isRunning else { return }
         

@@ -137,7 +137,7 @@ struct ProjectInformation: View {
             }
         }
     }
-    //FIXME: Ui is fade need waouh effect
+
     func badge(_ content: String, color: CustomColor) -> some View {
         BadgeView(content: content, color: color)
     }

@@ -59,7 +59,6 @@ extension Color {
         )
     }
 }
-//FIXME: Put this in Constant File
 
 struct CustomColor {
     let foreground: Color

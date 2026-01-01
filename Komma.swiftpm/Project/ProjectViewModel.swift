@@ -10,6 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 
+@MainActor
 class ProjectViewModel: ObservableObject {
     @Published private var model = createProjectModel()
     @Published var confettiCounter = 0
@@ -44,6 +45,27 @@ class ProjectViewModel: ObservableObject {
     
     func createDemo() {
         
+    }
+    
+    func binding<Value>(for project: Project, keyPath: WritableKeyPath<Project, Value>) -> Binding<Value> {
+        Binding(
+            get: { project[keyPath: keyPath] },
+            set: { [weak self] newValue in
+                var updatedProject = project
+                updatedProject[keyPath: keyPath] = newValue
+                self?.update(project: updatedProject)
+            }
+        )
+    }
+    func bindingTask<Value>(for task: ProjectTask, keyPath: WritableKeyPath<ProjectTask, Value>) -> Binding<Value> {
+        Binding(
+            get: { task[keyPath: keyPath] },
+            set: { [weak self] newValue in
+                var updatedTask = task
+                updatedTask[keyPath: keyPath] = newValue
+                self?.updateTask(task: updatedTask)
+            }
+        )
     }
     
     //MARK: - User Intents
@@ -120,7 +142,7 @@ class ProjectViewModel: ObservableObject {
                     loadProjects()
                     if !wasComplete && projects[projectIndex].tasks[taskIndex].subtasks[subtaskIndex].isComplete { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
                         confettiCounter += 1
-                    }
+                    } //TODO: Change confetti only when a task is completed
                 }
             }
         }
@@ -190,6 +212,3 @@ struct ImportJSONView: UIViewControllerRepresentable {
         }
     }
 }
-
-//TODO: rework the viewModel and the model
-

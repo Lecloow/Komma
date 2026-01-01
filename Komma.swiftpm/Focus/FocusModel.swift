@@ -8,10 +8,12 @@
 import Foundation
 
 struct FocusModel {
-    private(set) var session: Session
+    private(set) var sessions: [Session]
+    
+    private(set) var session: Session = Session(subtasks: []) //FIXME: Need rework
     
     init() {
-        session = Session(subtasks: [])
+        sessions = []
     }
     
     mutating func startTimer() {

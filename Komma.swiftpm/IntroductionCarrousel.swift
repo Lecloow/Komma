@@ -1,0 +1,16 @@
+//
+//  IntroductionCarrousel.swift
+//  Kómma
+//
+//  Created by Thomas Conchon on 12/30/25.
+//
+
+import SwiftUI
+
+struct IntroductionCarrousel: View {
+    @AppStorage("isFirstUse") var isFirstUse: Bool = true
+
+    var body: some View {
+        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    }
+}

@@ -23,15 +23,8 @@ struct CreateProjectView: View {
         VStack {
             if let project = project { 
                 VStack(alignment: .leading) {
-                    TextField("Untitled Project", text: Binding(
-                        get: { project.title },
-                        set: { newValue in
-                            var updatedProject = project
-                            updatedProject.title = newValue
-                            viewModel.update(project: updatedProject)
-                        }
-                    ))
-                    .font(.largeTitle)
+                    TextField("Untitled Project", text: viewModel.binding(for: project, keyPath: \.title))
+                        .font(.largeTitle)
                     Divider()
                     EditProjectInformation(viewModel: viewModel, project: project)
                     Divider()
@@ -127,14 +120,7 @@ struct EditProjectInformation: View {
     var project: Project
     
     var body: some View {
-        TextField("Description", text: Binding(
-            get: { project.description },
-            set: { newValue in
-                var updatedProject = project
-                updatedProject.description = newValue
-                viewModel.update(project: updatedProject)
-            }
-        ))
+        TextField("Description", text: viewModel.binding(for: project, keyPath: \.description))
         date
         status
         priority
@@ -144,26 +130,12 @@ struct EditProjectInformation: View {
     var date: some View {
         DatePicker(
             "Deadline",
-            selection: Binding(
-                get: { project.deadline },
-                set: { newValue in
-                    var updatedProject = project
-                    updatedProject.deadline = newValue
-                    viewModel.update(project: updatedProject)
-                }
-            ),
+            selection: viewModel.binding(for: project, keyPath: \.deadline),
             displayedComponents: [.date]
         )
     }
     var status: some View {
-        Picker("Change Status", selection: Binding(
-            get: { project.status },
-            set: { newValue in
-                var updatedProject = project
-                updatedProject.status = newValue
-                viewModel.update(project: updatedProject)
-            }
-        )) {
+        Picker("Change Status", selection: viewModel.binding(for: project, keyPath: \.status)) {
             Text("Later").tag(Status.later)
             Text("On Hold").tag(Status.onHold)
             Text("In Progress").tag(Status.inProgress)
@@ -172,14 +144,7 @@ struct EditProjectInformation: View {
         }
     }
     var priority: some View {
-        Picker("Change Priority", selection: Binding(
-            get: { project.priority },
-            set: { newValue in
-                var updatedProject = project
-                updatedProject.priority = newValue
-                viewModel.update(project: updatedProject)
-            }
-        )) {
+        Picker("Change Priority", selection: viewModel.binding(for: project, keyPath: \.priority)) {
             Text("Low").tag(Priority.low)
             Text("Normal").tag(Priority.normal)
             Text("High").tag(Priority.high)
@@ -187,11 +152,12 @@ struct EditProjectInformation: View {
         }
     }
     var progress: some View {
-            VStack(alignment: .leading) {
-                Text("Progress: \(project.progress)%")
-                ProgressView(value: Double(project.progress)/100)
-                    .tint(.primary)
-                    .animation(.easeInOut, value: project.progress)
-            }
+        VStack(alignment: .leading) {
+            Text("Progress: \(project.progress)%")
+            ProgressView(value: Double(project.progress)/100)
+                .tint(.primary)
+                .animation(.easeInOut, value: project.progress)
         }
+    }
+
 }

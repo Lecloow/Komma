@@ -16,7 +16,7 @@ let package = Package(
         .iOSApplication(
             name: "Kómma",
             targets: ["AppModule"],
-            bundleIdentifier: "com.thomasconchon.komma",
+            bundleIdentifier: "com.thomasconchon.kom-ma",
             teamIdentifier: "66DL9V5NKK",
             displayVersion: "1.0",
             bundleVersion: "1",

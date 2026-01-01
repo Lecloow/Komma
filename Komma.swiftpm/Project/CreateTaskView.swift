@@ -33,14 +33,7 @@ struct CreateTaskView: View {
         VStack(alignment: .leading) {
             if let task = task {
                 VStack(alignment: .leading) {
-                    TextField("Untitled Task", text: Binding(
-                        get: { task.title },
-                        set: { newValue in
-                            var updatedTask = task
-                            updatedTask.title = newValue
-                            viewModel.updateTask(task: updatedTask)
-                        }
-                    ))
+                    TextField("Untitled Task", text: viewModel.bindingTask(for: task, keyPath: \.title))
                     .font(.largeTitle)
                     Divider()
                     EditTaskInformation(viewModel: viewModel, task: task)
@@ -137,14 +130,7 @@ struct EditTaskInformation: View {
     var task: ProjectTask
     
     var body: some View {
-        TextField("Description", text: Binding(
-            get: { task.description },
-            set: { newValue in
-                var updatedTask = task
-                updatedTask.description = newValue
-                viewModel.updateTask(task: updatedTask)
-            }
-        ))
+        TextField("Description", text: viewModel.bindingTask(for: task, keyPath: \.description))
         date
         progress
     }
@@ -152,14 +138,7 @@ struct EditTaskInformation: View {
     var date: some View {
         DatePicker(
             "Deadline",
-            selection: Binding(
-                get: { task.deadline },
-                set: { newValue in
-                    var updatedTask = task
-                    updatedTask.deadline = newValue
-                    viewModel.updateTask(task: updatedTask)
-                }
-            ),
+            selection: viewModel.bindingTask(for: task, keyPath: \.deadline),
             displayedComponents: [.date]
         )
     }

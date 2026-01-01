@@ -28,6 +28,9 @@ struct CreateProjectView: View {
                     Divider()
                     EditProjectInformation(viewModel: viewModel, project: project)
                     Divider()
+                    Text("Tasks:")
+                        .font(.headline)
+                        .padding(.bottom, 10)
                     tasks
                     Spacer()
                 }
@@ -53,12 +56,7 @@ struct CreateProjectView: View {
         VStack(alignment: .leading) {
             if let project = project {
                 NavigationLink(destination: CreateTaskView(viewModel: viewModel, projectId: project.id)) {
-                    HStack {
-                        Image(systemName: "plus.app")
-                            .font(Font.system(size: 20))
-                        Text("New Task")
-                    }
-                    .tint(.primary)
+                    Label("New Task", systemImage: "plus")
                 }
                 List {
                     ForEach(project.tasks) { task in
@@ -135,20 +133,26 @@ struct EditProjectInformation: View {
         )
     }
     var status: some View {
-        Picker("Change Status", selection: viewModel.binding(for: project, keyPath: \.status)) {
-            Text("Later").tag(Status.later)
-            Text("On Hold").tag(Status.onHold)
-            Text("In Progress").tag(Status.inProgress)
-            Text("In Review").tag(Status.inReview)
-            Text("Done").tag(Status.done)
+        HStack {
+            Text("Status: ")
+            Picker("Change Status", selection: viewModel.binding(for: project, keyPath: \.status)) {
+                Text("Later").tag(Status.later)
+                Text("On Hold").tag(Status.onHold)
+                Text("In Progress").tag(Status.inProgress)
+                Text("In Review").tag(Status.inReview)
+                Text("Done").tag(Status.done)
+            }
         }
     }
     var priority: some View {
-        Picker("Change Priority", selection: viewModel.binding(for: project, keyPath: \.priority)) {
-            Text("Low").tag(Priority.low)
-            Text("Normal").tag(Priority.normal)
-            Text("High").tag(Priority.high)
-            Text("Urgent").tag(Priority.urgent)
+        HStack {
+            Text("Priority: ")
+            Picker("Change Priority", selection: viewModel.binding(for: project, keyPath: \.priority)) {
+                Text("Low").tag(Priority.low)
+                Text("Normal").tag(Priority.normal)
+                Text("High").tag(Priority.high)
+                Text("Urgent").tag(Priority.urgent)
+            }
         }
     }
     var progress: some View {

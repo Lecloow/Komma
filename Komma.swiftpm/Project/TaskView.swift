@@ -20,6 +20,9 @@ struct TaskView: View {
             Divider()
             TaskInformation(task: task)
             Divider()
+            Text("Subtasks:")
+                .font(.headline)
+                .padding(.bottom, -10)
             subtasks
         }
         .padding()
@@ -105,7 +108,7 @@ struct TaskInformation: View {
     
     var body: some View {
         Text(task.description)
-        Text("\(task.deadline.formatted(date: .abbreviated, time: .omitted))")
+        Text("\(task.deadline.formatted(date: .long, time: .omitted))")
         Text("Progress: \(task.progress)%")
         ProgressView(value: Double(task.progress)/100)
             .tint(.primary)

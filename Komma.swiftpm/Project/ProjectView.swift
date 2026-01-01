@@ -23,6 +23,9 @@ struct ProjectView: View {
             Divider()
             ProjectInformation(project: project)
             Divider()
+            Text("Tasks:")
+                .font(.headline)
+                .padding(.bottom, -10)
             tasks
             Spacer()
         }
@@ -95,7 +98,7 @@ struct ProjectInformation: View {
     
     var body: some View {
         Text(project.description)
-        Text("\(project.deadline.formatted(date: .abbreviated, time: .omitted))")
+        Text("\(project.deadline.formatted(date: .long, time: .omitted))")
         status
         priority
         Text("Progress: \(project.progress)%")

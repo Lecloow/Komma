@@ -9,43 +9,94 @@ import SwiftUI
 
 struct SubtaskView: View {
     var mode: Mode = .view
-    @ObservedObject var viewModel: ProjectViewModel
-    let subtask: Subtask
+    @ObservedObject var viewModel:  ProjectViewModel
+    let subtask:  Subtask
     @State var isShowingPopup = false
+    @State var isShowingEditPopup = false
+    @State private var hasAppeared = false
 
-        
     var body: some View {
         VStack {
             switch mode {
             case .edit:
-                TextField("Untitled Subtask", text: Binding(
-                    get: { subtask.title },
-                    set: { newValue in
-                        var updatedSubtask = subtask
-                        updatedSubtask.title = newValue
-                        viewModel.updateSubtask(subtask: updatedSubtask)
-                    }
-                ))
+                Button(action: { isShowingEditPopup = true }) {
+                    Text(subtask.title)
+                        .padding(.leading)
+                }
                 .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
+                .onAppear {
+                    if !hasAppeared && subtask.title.isEmpty {
+                        isShowingEditPopup = true
+                        hasAppeared = true
+                    }
+                }
             case .view:
                 Button(action: { isShowingPopup = true }) {
                     Text(subtask.title)
                 }
-                .transformToSubtaskView(viewModel: viewModel, subtask: subtask)
+                .transformToSubtaskView(viewModel:  viewModel, subtask: subtask)
                 .swipeActions(edge: .trailing) {
                     Button {
                         viewModel.completeSubtask(subtask: subtask)
                     } label: {
-                        Label(subtask.isComplete ? "Undo" : "Done", systemImage: subtask.isComplete ? "xmark" : "checkmark")
+                        Label(subtask.isComplete ? "Undo" : "Done", systemImage: subtask.isComplete ?  "xmark" : "checkmark")
                     }
                     .tint(subtask.isComplete ? .gray : .green)
                 }
             }
         }
         .sheet(isPresented: $isShowingPopup) {
-            Text(subtask.title)
-                .presentationDetents([.medium, .large])
+            SubtaskEditSheet(viewModel:  viewModel, subtask: subtask)
         }
+        .sheet(isPresented: $isShowingEditPopup) {
+            SubtaskEditSheet(mode: .edit, viewModel:  viewModel, subtask: subtask)
+        }
+    }
+}
+
+struct SubtaskEditSheet: View {
+    var mode: Mode = .view //TODO: Add switch for mode
+    @ObservedObject var viewModel: ProjectViewModel
+    var subtask: Subtask
+    @Environment(\.dismiss) var dismiss
+    @FocusState private var isFocused: Bool
+    
+    var body:  some View {
+        NavigationView {
+            VStack(alignment:  .leading) {
+                switch mode { //FIXME: Simplify
+                case .view:
+                    Text(subtask.title)
+                        .font(.title)
+                case .edit:
+                    TextField("Untitled Subtask", text: viewModel.bindingSubtask(for: subtask, keyPath: \.title))
+                        .focused($isFocused)
+                        .font(.title)
+                }
+                Divider()
+                Text("Notes")
+                    .font(.headline)
+                    .padding(.top, 10)
+                
+                ZStack(alignment: .topLeading) { //FIXME: alignment bug
+                    if subtask.notes.isEmpty {
+                        Text("Enter subtask details...") //FIXME: change text
+                            .foregroundColor(.gray.opacity(0.5))
+                            .font(.title2)
+                            .allowsHitTesting(false)
+                    }
+                    TextEditor(text: viewModel.bindingSubtask(for: subtask, keyPath: \.notes)) //TODO: switch mode
+                        .frame(minHeight: 200)
+                        .background(Color.clear)
+                        .scrollContentBackground(.hidden)
+                }
+                Spacer()
+            }
+            .padding()
+            .padding(.top)
+            .onAppear { isFocused = true }
+        }
+        .presentationDetents([.medium, .large])
     }
 }
 

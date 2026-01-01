@@ -67,6 +67,16 @@ class ProjectViewModel: ObservableObject {
             }
         )
     }
+    func bindingSubtask<Value>(for subtask: Subtask, keyPath: WritableKeyPath<Subtask, Value>) -> Binding<Value> {
+        Binding(
+            get: { subtask[keyPath: keyPath] },
+            set: { [weak self] newValue in
+                var updatedSubtask = subtask
+                updatedSubtask[keyPath: keyPath] = newValue
+                self?.updateSubtask(subtask: updatedSubtask)
+            }
+        )
+    }
     
     //MARK: - User Intents
     
@@ -126,7 +136,7 @@ class ProjectViewModel: ObservableObject {
         if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
                 let newId = (projects[projectIndex].tasks[taskIndex].subtasks.last?.id ?? 0) + 1
-                let subtask = Subtask(id: newId, projectId: task.projectId, taskId: task.id, title: title, isComplete: false)
+                let subtask = Subtask(id: newId, projectId: task.projectId, taskId: task.id, title: title, notes: "", isComplete: false)
                 model.addSubtasks(atProjectIndex: projectIndex, atTaskIndex: taskIndex, subtask: subtask)
                 loadProjects()
             }

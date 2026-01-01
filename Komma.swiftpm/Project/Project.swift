@@ -47,6 +47,7 @@ struct Subtask: Codable, Identifiable, Equatable {
     let projectId: Project.ID
     let taskId: ProjectTask.ID
     var title: String
+    var notes: String
     var isComplete: Bool
 }
 

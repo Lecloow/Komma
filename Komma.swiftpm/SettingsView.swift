@@ -29,6 +29,7 @@ struct SettingsView: View {
             Button("Delete Everything", role: .destructive) {
                 viewModel.deleteAccount()
                 viewModel.loadProjects()
+                isFirstUse = true
             }
         } message: {
             Text("This will permanently delete all your projects. You can't undo this.")
@@ -43,7 +44,7 @@ struct SettingsView: View {
     }
     var importantSection: some View {
         Section {
-            Button("Show Introduction") {
+            Button("Show Introduction") { //FIXME: Debug Only
                 isFirstUse = true
             }
             Button("Export Projects") {
@@ -55,7 +56,7 @@ struct SettingsView: View {
             Button("Import Projects") {
                 showImporter = true
             }
-            Button("Delete All Projects") {
+            Button("Delete All Projects") { //FIXME: Delete data not project
                 isShowingResetPopup = true
             }
             .foregroundStyle(.red)

@@ -38,6 +38,9 @@ struct CreateTaskView: View {
                     Divider()
                     EditTaskInformation(viewModel: viewModel, task: task)
                     Divider()
+                    Text("Subtasks:")
+                        .font(.headline)
+                        .padding(.bottom, 10)
                     subtasks
                     Spacer()
                 }
@@ -62,15 +65,14 @@ struct CreateTaskView: View {
     }
     
     var subtasks: some View {
-        VStack(alignment: .leading) {
+        Group {
             if let task = task {
-                Button(action: { viewModel.addSubtask(task: task, title: "") }) {
-                    Text("Add subtask")
+                Button(action: { viewModel.addSubtask(task: task, title: "") }) { //TODO: Add design
+                    Label("Add subtask", systemImage: "plus")
                 }
                 List {
                     ForEach(task.subtasks) { subtask in
                         SubtaskView(mode: .edit, viewModel: viewModel, subtask: subtask)
-                            .padding(.horizontal)
                             .listRowInsets(EdgeInsets())
                     }
                     .onDelete { indexSet in
@@ -78,7 +80,7 @@ struct CreateTaskView: View {
                             let subtask = task.subtasks[index]
                             viewModel.deleteSubtask(subtask: subtask)
                         }
-                    }  // Can't have swipe action and onMove
+                    }  //FIXME: onDelete swipe action is broken
                     .onMove { oldPosition, newPosition in
                         viewModel.moveSubTask(in: task, from: oldPosition, to: newPosition)
                     }

@@ -25,6 +25,7 @@ struct TaskView: View {
                 .padding(.bottom, -10)
             subtasks
         }
+        .confettiCannon(trigger: $viewModel.confettiSubtasksCounter)
         .padding()
         .alert("Delete Task ?", isPresented: $isShowingDeletePopup) {
             alertContent

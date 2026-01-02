@@ -13,13 +13,17 @@ struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
     var description: String
     var progress: Int {
         guard !tasks.isEmpty else { return 0 }
-        let completedCount = tasks.filter{ $0.progress == 100 }.count
-        let totalCount = tasks.count
-        return Int(((Double(completedCount) / Double(totalCount)) * 100).rounded())
+        
+        let allSubtasks = tasks.flatMap { $0.subtasks }
+        guard !allSubtasks.isEmpty else { return 0 }
+        
+        let completedCount = allSubtasks.filter { $0.isComplete }.count
+        let totalCount = allSubtasks.count
+        
+        return Int(((Double(completedCount) / Double(totalCount))*100).rounded())
     }
     var status: Status
     var priority: Priority
-//    var subtasks: [Subtask]
     var tasks: [ProjectTask]
     var deadline: Date
     var debugDescription: String {

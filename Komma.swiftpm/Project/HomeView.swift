@@ -14,11 +14,12 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
+            //TODO: Text here to explain
             projectsCards
             NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
                 VStack {
                     Image(systemName: "plus.app")
-                        .font(Font.system(size: 50))
+                        .font(.system(size: 50))
                     Text("New Project")
                 }
                 .tint(.primary)

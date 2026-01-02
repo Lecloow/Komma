@@ -74,21 +74,26 @@ struct SubtaskEditSheet: View {
                         .font(.title)
                 }
                 Divider()
-                Text("Notes")
+                Text("Notes:")
                     .font(.headline)
-                    .padding(.top, 10)
+                    .padding(.vertical, 10)
                 
-                ZStack(alignment: .topLeading) { //FIXME: alignment bug
-                    if subtask.notes.isEmpty {
-                        Text("Enter subtask details...") //FIXME: change text
-                            .foregroundColor(.gray.opacity(0.5))
-                            .font(.title2)
-                            .allowsHitTesting(false)
+                switch mode {
+                case .view:
+                    Text(subtask.notes)
+                case .edit:
+                    ZStack(alignment: .topLeading) { //FIXME: alignment bug
+                        if subtask.notes.isEmpty {
+                            Text("Enter subtask details...") //FIXME: change text
+                                .foregroundColor(.gray.opacity(0.5))
+                                .font(.title2)
+                                .allowsHitTesting(false)
+                        }
+                        TextEditor(text: viewModel.bindingSubtask(for: subtask, keyPath: \.notes))
+                            .frame(minHeight: 200)
+                            .background(Color.clear)
+                            .scrollContentBackground(.hidden)
                     }
-                    TextEditor(text: viewModel.bindingSubtask(for: subtask, keyPath: \.notes)) //TODO: switch mode
-                        .frame(minHeight: 200)
-                        .background(Color.clear)
-                        .scrollContentBackground(.hidden)
                 }
                 Spacer()
             }
@@ -117,7 +122,7 @@ struct TransformToSubtaskView: ViewModifier {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                         .contentTransition(.symbolEffect(.replace))
                         .tint(.primary)
-                        .sensoryFeedback(.success, trigger: viewModel.confettiCounter)
+                        .sensoryFeedback(subtask.isComplete ? .stop : .success, trigger: subtask.isComplete)
                 } else {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                         .tint(.primary)

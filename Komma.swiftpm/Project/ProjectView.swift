@@ -29,7 +29,6 @@ struct ProjectView: View {
             tasks
             Spacer()
         }
-        .confettiCannon(trigger: $viewModel.confettiCounter)
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
             alertContent
         } message: {

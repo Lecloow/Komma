@@ -13,7 +13,7 @@ import UniformTypeIdentifiers
 @MainActor
 class ProjectViewModel: ObservableObject {
     @Published private var model = createProjectModel()
-    @Published var confettiCounter = 0
+    @Published var confettiSubtasksCounter = 0
     
     private static func createProjectModel() -> ProjectManager {
         ProjectManager()
@@ -147,12 +147,12 @@ class ProjectViewModel: ObservableObject {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
                 if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
-                    let wasComplete = subtask.isComplete
                     model.completeSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, atSubtaskIndex: subtaskIndex)
                     loadProjects()
-                    if !wasComplete && projects[projectIndex].tasks[taskIndex].subtasks[subtaskIndex].isComplete { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
-                        confettiCounter += 1
-                    } //TODO: Change confetti only when a task is completed
+                    if projects[projectIndex].tasks[taskIndex].progress == 100 { //FIXME: I don't know why but there is a bug when a subtask is complete and you open the createProjectSubtaskView and you mark this subtask as incomplete, why there is some confetti
+                        //Edit: I think I know why there is a bug when the page appear, it triggers the confetti before it load the project, and so before the subtask update to uncomplete
+                        confettiSubtasksCounter += 1
+                    }
                 }
             }
         }

@@ -53,7 +53,7 @@ class ProjectViewModel: ObservableObject {
             set: { [weak self] newValue in
                 var updatedProject = project
                 updatedProject[keyPath: keyPath] = newValue
-                self?.update(project: updatedProject)
+                self?.updateProject(updatedProject)
             }
         )
     }
@@ -63,7 +63,7 @@ class ProjectViewModel: ObservableObject {
             set: { [weak self] newValue in
                 var updatedTask = task
                 updatedTask[keyPath: keyPath] = newValue
-                self?.updateTask(task: updatedTask)
+                self?.updateTask(updatedTask)
             }
         )
     }
@@ -73,7 +73,7 @@ class ProjectViewModel: ObservableObject {
             set: { [weak self] newValue in
                 var updatedSubtask = subtask
                 updatedSubtask[keyPath: keyPath] = newValue
-                self?.updateSubtask(subtask: updatedSubtask)
+                self?.updateSubtask(updatedSubtask)
             }
         )
     }
@@ -86,10 +86,6 @@ class ProjectViewModel: ObservableObject {
         model.addProject(project)
         loadProjects()
     }
-        
-    func choose(project: Project) {
-        loadProjects()
-    }
     
     func delete(project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
@@ -98,11 +94,19 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func update(project: Project) {
+    func updateProject(_ project: Project) {
         if let index = projects.firstIndex(where: { $0.id == project.id }) {
             model.update(atIndex: index, project: project)
             loadProjects()
         }
+    }
+    
+    func starProject(_ project: Project) { //TODO: Star or pin project
+        
+    }
+    
+    func starTask(_ task: ProjectTask) { //TODO: Star or pin project
+        
     }
     
     func addTask(projectId: Project.ID, title: String, description: String, deadline: Date) {
@@ -114,7 +118,7 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func updateTask(task: ProjectTask) {
+    func updateTask(_ task: ProjectTask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {
                 model.updateTask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, task: task)
@@ -143,7 +147,7 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func completeSubtask(subtask: Subtask) {
+    func completeSubtask(_ subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
                 if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
@@ -158,7 +162,7 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
-    func updateSubtask(subtask: Subtask) {
+    func updateSubtask(_ subtask: Subtask) {
         if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
                 if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {

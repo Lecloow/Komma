@@ -37,7 +37,7 @@ struct SubtaskView: View {
                 .transformToSubtaskView(viewModel:  viewModel, subtask: subtask)
                 .swipeActions(edge: .trailing) {
                     Button {
-                        viewModel.completeSubtask(subtask: subtask)
+                        viewModel.completeSubtask(subtask)
                     } label: {
                         Label(subtask.isComplete ? "Undo" : "Done", systemImage: subtask.isComplete ?  "xmark" : "checkmark")
                     }
@@ -55,7 +55,7 @@ struct SubtaskView: View {
 }
 
 struct SubtaskEditSheet: View {
-    var mode: Mode = .view //TODO: Add switch for mode
+    var mode: Mode = .view
     @ObservedObject var viewModel: ProjectViewModel
     var subtask: Subtask
     @Environment(\.dismiss) var dismiss
@@ -117,7 +117,7 @@ struct TransformToSubtaskView: ViewModifier {
         HStack {
             content
             Spacer()
-            Button(action: { viewModel.completeSubtask(subtask: subtask) }) {
+            Button(action: { viewModel.completeSubtask(subtask) }) {
                 if #available(iOS 17.0, *) {
                     Image(systemName: subtask.isComplete ? "checkmark.circle.fill" : "circle")
                         .contentTransition(.symbolEffect(.replace))

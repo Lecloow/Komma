@@ -77,7 +77,7 @@ struct ProjectView: View {
                     NavigationLink(destination: CreateProjectView(viewModel: viewModel, projectId: project.id)) {
                         Label("Edit Project", systemImage: "square.and.pencil")
                     }
-                    Button(action: { }) { //TODO: Star or pin project
+                    Button(action: { viewModel.starProject(project) }) {
                         Label("Add to favorites", systemImage: "plus")
                     }
                     Divider()

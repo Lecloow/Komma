@@ -68,7 +68,7 @@ struct TaskView: View {
                     NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: task.projectId))  {
                         Label("Edit Project", systemImage: "square.and.pencil")
                     }
-                    Button(action: { }) { //TODO: Star or pin project
+                    Button(action: { viewModel.starTask(task) }) { 
                         Label("Add to favorites", systemImage: "plus")
                     }
                     Divider()

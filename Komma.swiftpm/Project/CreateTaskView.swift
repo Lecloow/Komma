@@ -146,7 +146,7 @@ struct EditTaskInformation: View {
     }
     var progress: some View {
             VStack(alignment: .leading) {
-                Text("Progress: \(task.progress)%")
+                Text("\(task.progress)% complete · \(task.subtasks.filter{ $0.isComplete}.count) of \(task.subtasks.count) subtasks completed")
                 ProgressView(value: Double(task.progress)/100)
                     .tint(.primary)
                     .animation(.easeInOut, value: task.progress)

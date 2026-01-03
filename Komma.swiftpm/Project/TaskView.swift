@@ -109,8 +109,8 @@ struct TaskInformation: View {
     
     var body: some View {
         Text(task.description)
-        Text("\(task.deadline.formatted(date: .long, time: .omitted))")
-        Text("Progress: \(task.progress)%")
+        Text("Deadline: \(task.deadline.formatted(date: .long, time: .omitted))")
+        Text("\(task.progress)% complete · \(task.subtasks.filter{ $0.isComplete}.count) of \(task.subtasks.count) subtasks completed")
         ProgressView(value: Double(task.progress)/100)
             .tint(.primary)
             .animation(.easeInOut, value: task.progress)

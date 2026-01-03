@@ -44,7 +44,8 @@ class ProjectViewModel: ObservableObject {
     }
     
     func createDemo() {
-        
+        let demoProject = Project(id: 0, title: "Demo Project", description: "", status: .inReview, priority: .normal, tasks: [], deadline: Date())
+        model.addProject(demoProject)
     }
     
     func binding<Value>(for project: Project, keyPath: WritableKeyPath<Project, Value>) -> Binding<Value> {

@@ -97,7 +97,7 @@ struct ProjectInformation: View {
     
     var body: some View {
         Text(project.description)
-        Text("\(project.deadline.formatted(date: .long, time: .omitted))")
+        Text("Deadline: \(project.deadline.formatted(date: .long, time: .omitted))")
         status
         priority
         Text("Progress: \(project.progress)%")

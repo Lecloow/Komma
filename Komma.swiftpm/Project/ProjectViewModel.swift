@@ -174,6 +174,17 @@ class ProjectViewModel: ObservableObject {
         }
     }
     
+    func updateNotes(for subtask: Subtask, notes: String) {
+        if let projectIndex = projects.firstIndex(where: { $0.id == subtask.projectId }) {
+            if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == subtask.taskId }) {
+                if let subtaskIndex = projects[projectIndex].tasks[taskIndex].subtasks.firstIndex(where: { $0.id == subtask.id }) {
+                    model.updateSubtask(atProjectIndex: projectIndex, atTaskIndex: taskIndex, atSubtaskIndex: subtaskIndex, subtask: Subtask(id: subtask.id, projectId: subtask.projectId, taskId: subtask.taskId, title: subtask.title, notes: notes, isComplete: subtask.isComplete))
+                    loadProjects()
+                }
+            }
+        }
+    }
+    
     func moveSubTask(in task: ProjectTask, from source: IndexSet, to destination: Int) {
         if let projectIndex = projects.firstIndex(where: { $0.id == task.projectId }) {
             if let taskIndex = projects[projectIndex].tasks.firstIndex(where: { $0.id == task.id }) {

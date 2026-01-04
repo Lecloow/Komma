@@ -61,6 +61,16 @@ struct SubtaskEditSheet: View {
     @Environment(\.dismiss) var dismiss
     @FocusState private var isFocused: Bool
     
+    @State private var notes: String
+    
+    init(mode: Mode = .view, viewModel: ProjectViewModel, subtask: Subtask) {
+        self.viewModel = viewModel
+        self.subtask = subtask
+        self.mode = mode
+        _notes = State(initialValue: subtask.notes)
+    } //Really difficult just to make the sure the textEditor is not rebuild after by the binding
+    
+    
     var body:  some View {
         NavigationView {
             VStack(alignment:  .leading) {
@@ -86,13 +96,15 @@ struct SubtaskEditSheet: View {
                         if subtask.notes.isEmpty {
                             Text("Enter subtask details...") //FIXME: change text
                                 .foregroundColor(.gray.opacity(0.5))
-                                .font(.title2)
                                 .allowsHitTesting(false)
                         }
-                        TextEditor(text: viewModel.bindingSubtask(for: subtask, keyPath: \.notes))
+                        TextEditor(text: $notes)
                             .frame(minHeight: 200)
-                            .background(Color.clear)
+                            .background(.clear)
                             .scrollContentBackground(.hidden)
+                            .onChange(of: notes) { newValue in
+                                viewModel.updateNotes(for: subtask, notes: newValue)
+                            }
                     }
                 }
                 Spacer()

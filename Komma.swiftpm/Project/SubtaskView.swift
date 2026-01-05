@@ -92,15 +92,16 @@ struct SubtaskEditSheet: View {
                 case .view:
                     Text(subtask.notes)
                 case .edit:
-                    ZStack(alignment: .topLeading) { //FIXME: alignment bug
-                        if subtask.notes.isEmpty {
-                            Text("Enter subtask details...") //FIXME: change text
+                    ZStack(alignment: .topLeading) {
+                        if notes.isEmpty {
+                            Text("What needs to be done?")
                                 .foregroundColor(.gray.opacity(0.5))
+                                .padding(.top, 8)
+                                .padding(.leading, 5)
                                 .allowsHitTesting(false)
                         }
                         TextEditor(text: $notes)
                             .frame(minHeight: 200)
-                            .background(.clear)
                             .scrollContentBackground(.hidden)
                             .onChange(of: notes) { newValue in
                                 viewModel.updateNotes(for: subtask, notes: newValue)

@@ -15,6 +15,12 @@ struct HomeView: View {
     var body: some View {
         VStack {
             //TODO: Text here to explain
+            Text("👋, Hey, it's nice too see you again")
+                .font(.largeTitle)
+            Text("You have \(viewModel.projects.count) projects for the moment") //TODO: S if there is more than one
+            Divider()
+            Text("Projects:")
+                .font(.headline)
             projectsCards
             NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
                 VStack {

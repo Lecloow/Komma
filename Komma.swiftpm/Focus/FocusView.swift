@@ -8,23 +8,38 @@
 import SwiftUI
 
 struct FocusView: View {
-    @ObservedObject var viewModel: FocusViewModel //TODO: New Model ??? or use the project
+    @ObservedObject var viewModel: FocusViewModel
+    @ObservedObject var projectViewModel: ProjectViewModel
     
     var body: some View {
-        Text("Focus View")
-        Button(action: { viewModel.startSession() }) {
-            Text("Start timer")
+//        Text("Focus View")
+//        Button(action: { viewModel.startSession() }) {
+//            Text("Start timer")
+//        }
+//        Text(formatTime(viewModel.session.elapsedTime))
+//            .font(.system(size: 40, weight: .bold))
+//        Button(action: { viewModel.stopSession() }) {
+//            Text("Stop")
+//        }
+//        Button(action: { viewModel.resetTimer() }) {
+//            Text("Reset")
+//        }
+        VStack {
+            Text("What do we work today ?") //FIXME: Text is bad
+                .font(.title)
+            projects
         }
-        Text(formatTime(viewModel.session.elapsedTime))
-            .font(.system(size: 40, weight: .bold))
-        Button(action: { viewModel.stopSession() }) {
-            Text("Stop")
-        }
-        Button(action: { viewModel.resetTimer() }) {
-            Text("Reset")
-        }
+        .padding()
+        
     }
     
+    var projects: some View {
+        ForEach(projectViewModel.projects) { project in
+            NavigationLink(destination: Text("Next Slide")) { //TODO: Next Slide
+                Text(project.title)
+            }
+        }
+    }
     
     func formatTime(_ seconds: Int) -> String {
         let minutes = seconds / 60

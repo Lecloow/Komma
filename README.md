@@ -1,3 +1,4 @@
+# Work In Progress
 [![Swift Version](https://img.shields.io/badge/Swift_Compatibility-6_|_Playground-orange.svg)](https://developer.apple.com/swift/)
 [![Platform](https://img.shields.io/badge/Platform-iOS-blue.svg)](https://developer.apple.com/ios/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
@@ -53,6 +54,8 @@ The design draws inspiration from Notion and Apple’s native apps, with every i
 
 
 ## 📸 Screenshots
+
+**IN PROGRESS**
 
 1. Projects list
 2. Project detail with subtasks

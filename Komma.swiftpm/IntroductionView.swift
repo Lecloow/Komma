@@ -9,6 +9,8 @@ import SwiftUI
 
 struct IntroductionView: View {
     @AppStorage("isFirstUse") var isFirstUse: Bool = true
+    @AppStorage("username") var username: String = ""
+    @State private var showNamePopup: Bool = false
     
     var body: some View {
         VStack {
@@ -63,12 +65,19 @@ struct IntroductionView: View {
     }
     var button: some View {
         //NavigationLink(destination: IntroductionCarrousel()) {
-        Button(action: { isFirstUse = false }) { //TODO: IntroductionCarrousel
+        Button(action: {
+            if username.isEmpty {
+                showNamePopup = true
+            } else {
+                isFirstUse = false
+            }
+        }) { //TODO: IntroductionCarrousel
             Text("Let's get started")
                 .font(.title2)
                 .frame(height: 35)
         }
         .tint(.primary)
+        .updateNameAlert($username, showingPopup: $showNamePopup, isFirstUse: $isFirstUse)
     }
 }
 // MARK: - Supporting Rounded Corner Shape

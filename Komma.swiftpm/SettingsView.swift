@@ -9,10 +9,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var viewModel: ProjectViewModel
+    @AppStorage("isFirstUse") var isFirstUse = true
+    @AppStorage("username") var username: String = ""
     @State var showImporter = false
     @State var isShowingResetPopup = false
-    @AppStorage("isFirstUse") var isFirstUse = true
     @State var isShowingAboutSheet = false
+    @State private var showNamePopup: Bool = false
     
     var body: some View {
         VStack {
@@ -44,6 +46,7 @@ struct SettingsView: View {
     }
     var importantSection: some View {
         Section {
+            Button("Change name") { showNamePopup = true }.updateNameAlert($username, showingPopup: $showNamePopup, isFirstUse: $isFirstUse)
             Button("Show Introduction") { //FIXME: Debug Only
                 isFirstUse = true
             }
@@ -53,10 +56,8 @@ struct SettingsView: View {
                     viewModel.exportProjects(viewModel.projects, from: root)
                 }
             }
-            Button("Import Projects") {
-                showImporter = true
-            }
-            Button("Delete All Projects") { //FIXME: Delete data not project
+            Button("Import Projects") { showImporter = true }
+            Button("Delete all Projects") { //FIXME: Delete data not project
                 isShowingResetPopup = true
             }
             .foregroundStyle(.red)
@@ -75,5 +76,31 @@ struct SettingsView: View {
     }
     var aboutText: some View {
         Text("Kómma was created by Thomas Conchon for the 2026 Swift Student Challenge.")
+    }
+    var alertContent: some View {
+        VStack {
+            TextField("How should we call you?", text: $username)
+            Button("Continue") {
+                isFirstUse = false
+            }
+            .disabled(username.isEmpty)
+        }
+    }
+}
+
+extension View {
+    func updateNameAlert(_ username: Binding<String>, showingPopup: Binding<Bool>, isFirstUse: Binding<Bool>) -> some View {
+        self
+            .alert("Choose your name", isPresented: showingPopup) {
+                TextField("How should we call you?", text: username)
+                    .textContentType(.givenName)
+                
+                Button("Continue") {
+                    isFirstUse.wrappedValue = false
+                }
+                .disabled(username.wrappedValue.isEmpty)
+            } message: {
+                Text("This helps personalize your experience.")
+            }
     }
 }

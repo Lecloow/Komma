@@ -11,29 +11,28 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var viewModel: ProjectViewModel
     @State var isShowingDeletePopup = false
+    @AppStorage("username") var username: String = ""
     
     var body: some View {
-        VStack {
-            //TODO: Text here to explain
-            Text("👋, Hey, it's nice too see you again")
-                .font(.largeTitle)
-            Text("You have \(viewModel.projects.count) projects for the moment") //TODO: S if there is more than one
+        VStack(alignment: .leading) {
+            welcomeText
             Divider()
             Text("Projects:")
                 .font(.headline)
             projectsCards
-            NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
-                VStack {
-                    Image(systemName: "plus.app")
-                        .font(.system(size: 50))
-                    Text("New Project")
-                }
-                .tint(.primary)
-            }
-            .padding()
+            addProjectButton
         }
         .onAppear {
             viewModel.loadProjects()
+        }
+        .padding()
+    }
+    
+    var welcomeText: some View {
+        Group {
+            Text("👋, Hey \(username)") //TODO: Sometimes show "👋, Welcome back \(username)"
+                .font(.title)
+            Text("You have created ^[\(viewModel.projects.count) project](inflect: true). Keep going!") //Pluralize project if there is more than one
         }
     }
     
@@ -48,20 +47,37 @@ struct HomeView: View {
                         }
                 }
                 .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
-                    HStack {
-                        Button("Cancel", role: .cancel) { }
-                        Button("Delete Project", role: .destructive) {
-                            viewModel.delete(project: project)
-                        }
-                    }
+                    alertContent(project: project)
                 } message: {
                     Text("This will permanently delete the project. You can't undo this.")
                 }
             }
             .padding(.top)
         }
-        .padding(.top)
-        
+    }
+    
+    func alertContent(project: Project) -> some View {
+        HStack {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete Project", role: .destructive) {
+                viewModel.delete(project: project)
+            }
+        }
+    }
+    
+    var addProjectButton: some View {
+        HStack {
+            Spacer()
+            NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
+                VStack {
+                    Image(systemName: "plus.app")
+                        .font(.system(size: 50))
+                    Text("New Project")
+                }
+                .tint(.primary)
+            }
+            Spacer()
+        }
     }
     
     @ViewBuilder

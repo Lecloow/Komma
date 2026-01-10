@@ -35,7 +35,6 @@ struct CardView: View {
             .foregroundStyle(.primary)
             .padding()
         }
-        .padding(.horizontal)
     }
 }
 //TODO: Darkmode

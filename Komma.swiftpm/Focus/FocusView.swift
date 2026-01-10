@@ -24,8 +24,8 @@ struct FocusView: View {
 //        Button(action: { viewModel.resetTimer() }) {
 //            Text("Reset")
 //        }
-        VStack {
-            Text("What do we work today ?") //FIXME: Text is bad
+        VStack(alignment: .leading) {
+            Text("Which project are we focusing on today?")
                 .font(.title)
             projects
         }

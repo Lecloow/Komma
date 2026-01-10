@@ -13,7 +13,7 @@ struct IntroductionView: View {
     var body: some View {
         VStack {
             RoundedCornerShape(radius: 50, corners: [.bottomLeft, .bottomRight])
-                .foregroundStyle(Color(hex:"#0060d6")) //a beautiful green (2e9f84) or 0060d6 (blue)
+                .foregroundStyle(Color(hex:"#0060d6")) //a beautiful blue (#0060d6), or a green (#2e9f84)
                 .ignoresSafeArea()
                 .overlay(/*alignment: .leading*/ ) {
                     VStack(alignment: .leading) {
@@ -24,7 +24,7 @@ struct IntroductionView: View {
                         }
                         Group {
                             HStack {
-                                //Image(systemName: "apple.logo") //TODO: Little logo
+                                //Image("logo") //TODO: Little logo
                                 Text("Kómma")
                             }
                                 .font(.system(.title, design: .rounded))
@@ -33,7 +33,7 @@ struct IntroductionView: View {
                             Text("The app to help you focus on work")
                                 .font(.system(.largeTitle, design: .rounded))
                                 .fontWeight(.semibold)
-                            Text("Description: blakaldbk bdjqdjb ss dvjdjqkddid sgdksdgdshs ddssgdisdifndjfb dhfdihf")
+                            Text("ad ullamco amet sit reprehenderit ipsum veniam excepteur do eu sunt occaecat officia aute labore")//TODO: description
                                 .font(.title3)
                         }
                         .foregroundStyle(.white)

@@ -8,8 +8,12 @@
 import Foundation
 
 @MainActor
-class FocusViewModel: ObservableObject {
+class FocusViewModel: ObservableObject { //Cannot use @observable because it's iOS 17 or newer
     @Published private var model = createFocusModel()
+    
+    @Published private(set) var selectedSubtasks: [Subtask] = []
+    var estimatedTime: TimeInterval = 30
+    var notes: String = ""
     
     private static func createFocusModel() -> FocusModel {
         FocusModel()
@@ -22,18 +26,23 @@ class FocusViewModel: ObservableObject {
         model.session
     }
     
-//    func startSession() {
-//        model.startTimer()
-//    }
-//    
-//    func stopSession() {
-//        model.stopTimer()
-//    }
-    
     private var timer: Timer?
             
     // MARK: - User Intent(s)
+    
+    func select(_ subtask: Subtask) {
+        if selectedSubtasks.contains(where: { $0.id == subtask.id }) {
+            selectedSubtasks.removeAll(where: { $0.id == subtask.id })
+        } else {
+            selectedSubtasks.append(subtask)
+        }
+    }
+    
     func startSession() {
+        model.createSession(selectedSubtasks)
+    }
+    
+    func startTimer() {
         guard !session.isRunning else { return }
         
         model.startTimer()

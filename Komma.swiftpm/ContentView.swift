@@ -21,7 +21,7 @@ struct ContentView: View {
                     }
                     Tab("Focus", systemImage: "figure.mind.and.body") {
                         NavigationStack {
-                            FocusView(viewModel: focusViewModel, projectViewModel: projectViewModel)
+                            FocusView(focusViewModel: focusViewModel, projectViewModel: projectViewModel)
                         }
                     }
                     Tab("Settings", systemImage: "gear") {
@@ -41,7 +41,7 @@ struct ContentView: View {
                         Label("Home", systemImage: "house")
                     }
                     NavigationStack {
-                        FocusView(viewModel: focusViewModel, projectViewModel: projectViewModel)
+                        FocusView(focusViewModel: focusViewModel, projectViewModel: projectViewModel)
                     }
                     .tabItem {
                         Label("Focus", systemImage: "figure.mind.and.body")

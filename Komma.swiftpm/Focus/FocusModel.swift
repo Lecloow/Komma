@@ -16,6 +16,10 @@ struct FocusModel {
         sessions = []
     }
     
+    mutating func createSession(_ subtasks: [Subtask]) {
+        session.subtasks = subtasks
+    }
+    
     mutating func startTimer() {
         session.isRunning = true
     }

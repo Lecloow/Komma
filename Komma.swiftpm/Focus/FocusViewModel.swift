@@ -12,7 +12,11 @@ class FocusViewModel: ObservableObject { //Cannot use @observable because it's i
     @Published private var model = createFocusModel()
     
     @Published private(set) var selectedSubtasks: [Subtask] = []
-    var estimatedTime: TimeInterval = 30
+    @Published var estimatedMinutes: Int = 25
+    @Published var estimatedHours: Int = 0
+    var estimatedTime: TimeInterval {
+        TimeInterval(estimatedMinutes*60+estimatedHours*3600) //FIXME: Perhaps
+    }
     var notes: String = ""
     
     private static func createFocusModel() -> FocusModel {

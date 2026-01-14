@@ -42,13 +42,6 @@ struct FocusView: View {
             }
         }
     }
-    
-    
-    func formatTime(_ seconds: Int) -> String {
-        let minutes = seconds / 60
-        let secs = seconds % 60
-        return String(format: "%02d:%02d", minutes, secs)
-    }
 }
 
 struct ChooseTaskView: View {
@@ -64,7 +57,7 @@ struct ChooseTaskView: View {
     
     var tasks: some View {
         ForEach(project.tasks) { task in //TODO: Sort by progress and by due date
-            NavigationLink(destination: SelectSubtasksView(viewModel: viewModel, task: task)) { //TODO: Next Slide
+            NavigationLink(destination: SelectSubtasksView(viewModel: viewModel, task: task)) {
                 Text(task.title)
             }
         }
@@ -140,7 +133,7 @@ struct SetupSessionView: View {
             Text("Before you start, please set your estimated focus duration and some notes about what are you doing")
             HStack {
                 Spacer()
-                CustomPickerView()
+                CustomPickerView(viewModel: viewModel)
                 Spacer()
             }
             Spacer()
@@ -150,7 +143,7 @@ struct SetupSessionView: View {
     
     var button: some View {
         if #available(iOS 26.0, *) {
-            AnyView( // No choice due to buttonSizing only available in iOS 26
+            AnyView(
             buttonContent
                 .buttonSizing(.flexible)
                 .buttonStyle(.glassProminent)
@@ -172,13 +165,15 @@ struct SetupSessionView: View {
     }
 }
 
-struct CustomPickerView: View {
-    let spaceBetweenPicker: CGFloat = -100 //40
+struct CustomPickerView: View { // Why this is not a basic SwiftUI component, it may be so useful
+    @ObservedObject var viewModel: FocusViewModel
+    let spaceBetweenPicker: CGFloat = -22
+    let offset: CGFloat = -20 // Don't ask why, it just works
     
-    var body: some View { //A lot of bug with the left picker
+    var body: some View {
         VStack {
             HStack(spacing: 0) {
-                Picker(selection: .constant(0), label: Text("Picker")) {
+                Picker(selection: $viewModel.estimatedHours, label: Text("Picker")) {
                     ForEach(0..<24) { hour in
                         Text("\(hour)").tag(hour)
                     }
@@ -186,23 +181,28 @@ struct CustomPickerView: View {
                 .pickerStyle(.wheel)
                 .clipShape(.rect.offset(x: spaceBetweenPicker))
                 .padding(.trailing, spaceBetweenPicker)
-                Text("hour")
-                    .font(.headline)
-                    .padding(.vertical, 6)
-                    .background(Color(hex: "f4f4f5"))
-                Spacer()
-                Picker(selection: .constant(25), label: Text("Picker")) {
-                    ForEach(0..<60) { minute in //TODO: Replace 25 by actual minutes
+                Color(hex: "f4f4f5")
+                    .overlay(Text(viewModel.estimatedHours > 1 ? "Hours" : "Hour")
+                        .font(.headline), alignment: .leading)
+                    .offset(x: offset)
+                    .frame(width: 80, height: 32)
+                Color(hex: "f4f4f5")
+                    .frame(width: 50, height: 32)
+                    .offset(x: offset)
+                Picker(selection: $viewModel.estimatedMinutes, label: Text("Picker")) {
+                    ForEach(0..<60) { minute in
                         Text("\(minute)").tag(minute)
                     }
                 }
                 .pickerStyle(.wheel)
                 .clipShape(.rect.offset(x: -spaceBetweenPicker))
-                .padding(.leading, spaceBetweenPicker)
-                Text("hour") //TODO: clip leading and RoundedRectangle
-                    .font(.headline)
-                    .padding(.vertical, 6)
-                    .background(Color(hex: "f4f4f5"))
+                .clipShape(.rect.offset(x: spaceBetweenPicker))
+                .padding(.leading, spaceBetweenPicker+offset)
+                RoundedRectangle(cornerRadius: 40).foregroundStyle(Color(hex: "f4f4f5"))
+                    .overlay(Text(viewModel.estimatedMinutes > 1 ? "Mins" : "Min")
+                        .font(.headline), alignment: .leading)
+                    .offset(x: 2*offset)
+                    .frame(width: 80, height: 32)
             }
             .padding()
         }
@@ -210,19 +210,27 @@ struct CustomPickerView: View {
     }
 }
 
-struct TimerView: View { //Finally the real focus view
+struct TimerView: View { // Finally the real focus view
     @ObservedObject var viewModel: FocusViewModel
     
     var body: some View {
-        ForEach(viewModel.selectedSubtasks) { subtask in
-            if let subtask = viewModel.session.subtasks.first(where: { $0.id == subtask.id }) {
-                Text(subtask.title)
-            } else {
-                Text("Subtask not found")
+        VStack {
+            ForEach(viewModel.selectedSubtasks) { subtask in
+                if let subtask = viewModel.session.subtasks.first(where: { $0.id == subtask.id }) {
+                    Text(subtask.title)
+                } else {
+                    Text("Subtask not found")
+                }
             }
+            Text(formatTime(Int(viewModel.estimatedTime)))
         }
         .onAppear() {
             viewModel.startSession()
         }
+    }
+    func formatTime(_ seconds: Int) -> String {
+        let minutes = seconds / 60
+        let secs = seconds % 60
+        return String(format: "%02d:%02d", minutes, secs)
     }
 }

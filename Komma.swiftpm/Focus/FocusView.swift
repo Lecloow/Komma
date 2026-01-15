@@ -120,6 +120,7 @@ struct SelectSubtasksView: View {
     var buttonContent: some View {
         NavigationLink(destination: SetupSessionView(viewModel: viewModel)) {
             Text("Finish Setup")
+                .frame(height: 35)
         }
         .tint(.primary)
     }
@@ -131,14 +132,12 @@ struct SetupSessionView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Before you start, please set your estimated focus duration and some notes about what are you doing")
-            HStack {
-                Spacer()
-                CustomPickerView(viewModel: viewModel)
-                Spacer()
-            }
+            CustomPickerView(viewModel: viewModel)
+            TextEditor(text: $viewModel.notes)
             Spacer()
             button
         }
+        .padding()
     }
     
     var button: some View {
@@ -160,6 +159,7 @@ struct SetupSessionView: View {
     var buttonContent: some View {
         NavigationLink(destination: TimerView(viewModel: viewModel)) {
             Text("Start Focusing!")
+                .frame(height: 35)
         }
         .tint(.primary)
     }
@@ -168,7 +168,7 @@ struct SetupSessionView: View {
 struct CustomPickerView: View { // Why this is not a basic SwiftUI component, it may be so useful
     @ObservedObject var viewModel: FocusViewModel
     let spaceBetweenPicker: CGFloat = -22
-    let offset: CGFloat = -20 // Don't ask why, it just works
+    let offset: CGFloat = -10 // Don't ask why, it just works
     
     var body: some View {
         VStack {
@@ -198,11 +198,14 @@ struct CustomPickerView: View { // Why this is not a basic SwiftUI component, it
                 .clipShape(.rect.offset(x: -spaceBetweenPicker))
                 .clipShape(.rect.offset(x: spaceBetweenPicker))
                 .padding(.leading, spaceBetweenPicker+offset)
-                RoundedRectangle(cornerRadius: 40).foregroundStyle(Color(hex: "f4f4f5"))
-                    .overlay(Text(viewModel.estimatedMinutes > 1 ? "Mins" : "Min")
-                        .font(.headline), alignment: .leading)
-                    .offset(x: 2*offset)
-                    .frame(width: 80, height: 32)
+                RoundedCornerShape(radius: 40, corners: [.topRight, .bottomRight])
+                    .foregroundStyle(Color(hex: "f4f4f5"))
+                    .overlay(
+                        Text(viewModel.estimatedMinutes > 1 ? "Mins" : "Min")
+                        .font(.headline),
+                        alignment: .leading)
+                    .offset(x: 3*offset)
+                    .frame(width: 70, height: 32)
             }
             .padding()
         }

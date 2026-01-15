@@ -65,11 +65,12 @@ The design draws inspiration from Notion and Apple’s native apps, with every i
 ### 🙏 Acknowledgments & License
 
 - **Apple** - For creating SwiftUI and inspiring millions of developers
-- **@simibac** - For the amazing https://github.com/simibac/ConfettiSwiftUI library
+- **@simibac** - For the amazing [Confetti SwiftUI](https://github.com/simibac/ConfettiSwiftUI) library
 - **The Swift community** - For countless Stack Overflow answers and blog posts
 - **CS193P** - For providing the best lessons to learn swiftUI
 
-This project is under MIT License  
+Kómma is licensed under the [MIT License](https://choosealicense.com/licenses/mit/), allowing you to use, modify, and distribute it for both commercial and non-commercial purposes, provided that the license terms are respected. See the [LICENSE](https://github.com/Lecloow/Komma/blob/main/LICENSE) file for more details.
+
 Created for the **Swift Student Challenge 2026**
 
 ---

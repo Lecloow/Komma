@@ -23,12 +23,22 @@ struct Kómma: App {
 //        }
 //    }()
 
+    @State private var showLaunchScreen = true
     @State var projectViewModel = ProjectViewModel()
     @State var focusViewModel = FocusViewModel()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(projectViewModel: projectViewModel, focusViewModel: focusViewModel)
+            if showLaunchScreen {
+                SplashScreenView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            showLaunchScreen = false
+                        }
+                    }
+            } else {
+                ContentView(projectViewModel: projectViewModel, focusViewModel: focusViewModel)
+            }
         }
 //        .modelContainer(sharedModelContainer)
     }

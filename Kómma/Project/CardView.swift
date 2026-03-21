@@ -28,8 +28,7 @@ struct CardView: View {
                 }
                 Spacer()
                 VStack {
-                    CircularProgressView(progress: CGFloat(project.progress) / 100)
-                        .frame(width: 20, height: 20)
+                    CircularProgressView(progress: CGFloat(project.progress) / 100, size: 20)
                 }
             }
             .foregroundStyle(.primary)
@@ -41,7 +40,8 @@ struct CardView: View {
 
 struct CircularProgressView: View {
     let progress: CGFloat
-    let lineWidth: CGFloat = 3.5
+    let size: CGFloat
+    var lineWidth: CGFloat { size/6 }
     
     var body: some View {
         ZStack {
@@ -57,5 +57,6 @@ struct CircularProgressView: View {
                 .rotationEffect(Angle(degrees: 270.0))
                 .animation(.easeInOut, value: progress)
         }
+        .frame(width: size, height: size)
     }
 }

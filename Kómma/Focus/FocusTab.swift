@@ -50,7 +50,8 @@ struct ChooseTaskView: View {
     
     var body: some View {
         VStack {
-            Text("Now select a task to focus on!")
+            Text("Now select a task to focus on and choose your work duration")
+            CustomPickerView(viewModel: viewModel)
             tasks
         }
     }
@@ -64,16 +65,33 @@ struct ChooseTaskView: View {
     }
 }
 
+//TODO: better if you choose the time and an ai choose the subtasks for you
+
 struct SelectSubtasksView: View {
     var viewModel: FocusViewModel
     let task: ProjectTask
     
     var body: some View {
         Text("You need to select all the subtasks you want to work on")
-        subtasks
+        Text("Recommended subtasks for you:").font(.caption)
+        recommendedSubtasks //TODO: 
+        //subtasks //Ai will choose for you based on the duration
         button
     }
     
+    var recommendedSubtasks: some View {
+        List {
+            ForEach(task.subtasks.filter { !$0.isComplete }) { subtask in //Only not finished subtasks
+                HStack {
+                    Text(subtask.title)
+                    Spacer()
+                    selectButton(subtask: subtask)
+                }
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+    }
     var subtasks: some View {
         List {
             ForEach(task.subtasks.filter { !$0.isComplete }) { subtask in //Only not finished subtasks

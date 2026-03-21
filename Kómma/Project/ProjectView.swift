@@ -17,17 +17,20 @@ struct ProjectView: View {
     @State var isShowingDeletePopup = false
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(project.title)
-                .font(.largeTitle)
-            Divider()
-            ProjectInformation(project: project)
-            Divider()
-            Text("Tasks:")
-                .font(.headline)
-                .padding(.bottom, -10)
-            tasks
-            Spacer()
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                Spacer()
+                Text(project.title)
+                    .font(.largeTitle)
+                Divider()
+                ProjectInformation(project: project)
+                Divider()
+                Text("Tasks:")
+                    .font(.headline)
+                    .padding(.bottom, -10)
+                tasks
+                Spacer()
+            }
         }
         .alert("Delete Project ?", isPresented: $isShowingDeletePopup) {
             alertContent
@@ -38,23 +41,18 @@ struct ProjectView: View {
             toolbar
         }
         .multilineTextAlignment(.leading)
-        .padding()
+        .padding(.horizontal)
     }
     
     var tasks: some View {
-        List {
-            ForEach(project.tasks) { task in
-                CardForTaskView(viewModel: viewModel, task: task, project: project)
-                    .listRowInsets(EdgeInsets())
-                    .contextMenu {
-                        NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: task.projectId)) {
-                            Label("Edit Task", systemImage: "square.and.pencil")
-                        }
+        ForEach(project.tasks) { task in
+            CardForTaskView(viewModel: viewModel, task: task, project: project)
+                .contextMenu {
+                    NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: task.projectId)) {
+                        Label("Edit Task", systemImage: "square.and.pencil")
                     }
-            }
+                }
         }
-        .listStyle(. plain)
-        .scrollContentBackground(.hidden)
     }
     
     var alertContent: some View {
@@ -144,3 +142,4 @@ struct ProjectInformation: View {
         BadgeView(content: content, color: color)
     }
 }
+

@@ -29,6 +29,10 @@ struct Project: Equatable, Codable, Identifiable, CustomDebugStringConvertible {
     var debugDescription: String {
         "\(id): title: \(title) \(description) \(progress), tasks: \(tasks)"
     }
+    
+    func isNull() -> Bool {
+        title.isEmpty && description.isEmpty && tasks.isEmpty
+    }
 }
 
 struct ProjectTask: Codable, Identifiable, Equatable {

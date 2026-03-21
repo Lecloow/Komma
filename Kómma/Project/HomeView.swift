@@ -17,10 +17,20 @@ struct HomeView: View {
         VStack(alignment: .leading) {
             welcomeText
             Divider()
-            Text("Projects:")
-                .font(.headline)
+            HStack {
+                Text("Projects:")
+                    .font(.headline)
+                Spacer()
+                NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
+                    Image(systemName: "plus.circle")
+                        .font(.system(size: 25))
+                        .padding(2)
+                        .glassEffect()
+                        .tint(.primary)
+                }
+            }
             projectsCards
-            addProjectButton
+            //addProjectButton
         }
         .onAppear {
             viewModel.loadProjects()
@@ -65,20 +75,20 @@ struct HomeView: View {
         }
     }
     
-    var addProjectButton: some View {
-        HStack {
-            Spacer()
-            NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
-                VStack {
-                    Image(systemName: "plus.app")
-                        .font(.system(size: 50))
-                    Text("New Project")
-                }
-                .tint(.primary)
-            }
-            Spacer()
-        }
-    }
+//    var addProjectButton: some View {
+//        HStack {
+//            Spacer()
+//            NavigationLink(destination: CreateProjectView(viewModel: viewModel)) {
+//                VStack {
+//                    Image(systemName: "plus.app")
+//                        .font(.system(size: 50))
+//                    Text("Launch a new project") //FIXME: We don't create projet everyday, this need to be more subtil, like in the vstask of the project text
+//                }
+//                .tint(.primary)
+//            }
+//            Spacer()
+//        }
+//    }
     
     @ViewBuilder
     private func projectContextMenu(for project: Project) -> some View {

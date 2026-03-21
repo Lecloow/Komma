@@ -84,24 +84,72 @@ struct TaskView: View {
     }
 }
 
+//struct CardForTaskView: View {
+//    var mode: Mode = .view
+//    var viewModel: ProjectViewModel
+//    @Environment(\.dismiss) private var dismiss
+//    var task: ProjectTask
+//    var project: Project
+//    
+//    var body: some View {
+//        switch mode {
+//        case .view:
+//            NavigationLink(destination: TaskView(viewModel: viewModel, task: task)) {
+//                Text(task.title)
+//            }
+//        case .edit:
+//            NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: project.id)) {
+//                Text(task.title)
+//            }
+//        }
+//    }
+//}
+
 struct CardForTaskView: View {
     var mode: Mode = .view
     var viewModel: ProjectViewModel
     @Environment(\.dismiss) private var dismiss
     var task: ProjectTask
     var project: Project
+    @State var isExpanded: Bool = true
     
     var body: some View {
-        switch mode {
-        case .view:
-            NavigationLink(destination: TaskView(viewModel: viewModel, task: task)) {
-                Text(task.title)
+        Button(action: {
+            withAnimation(.none) {
+                isExpanded.toggle()
             }
-        case .edit:
-            NavigationLink(destination: CreateTaskView(viewModel: viewModel, taskId: task.id, projectId: project.id)) {
+        }) {
+            HStack {
                 Text(task.title)
+                Spacer()
+                CircularProgressView(progress: CGFloat(task.progress) / 100, size: 12)
+                Image(systemName: isExpanded ? "chevron.down" : "chevron.up")
+            }
+            .font(.headline)
+        }
+        .tint(.secondary)
+        .onAppear {
+            if task.progress == 100 {
+                isExpanded = false
             }
         }
+        
+        if isExpanded {
+            subtasks
+        }
+    }
+    
+    var subtasks: some View {
+        ForEach(task.subtasks, id: \.compositeId) { subTask in
+            SubtaskView(viewModel: viewModel, subtask: subTask)
+                .tint(.primary)
+        }
+    }
+}
+
+extension Subtask {
+    var compositeId: String {
+        "\(taskId)-\(id)"
     }
 }
 

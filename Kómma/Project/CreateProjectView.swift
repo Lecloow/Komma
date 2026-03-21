@@ -34,6 +34,20 @@ struct CreateProjectView: View {
                     tasks
                     Spacer()
                 }
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            if project.isNull() {
+                                viewModel.delete(project: project)
+                            }
+                            dismiss()
+
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+                    }
+                }
                 .toolbar { toolbar }
                 .multilineTextAlignment(.leading)
                 .padding()
@@ -101,6 +115,7 @@ struct CreateProjectView: View {
     }
     var buttons: some View {
         HStack {
+            //FIXME: if go back but projet empty then delete it
             Button(role: .destructive, action: { isShowingDeletePopup = true }) {
                 Label("Delete Project", systemImage: "trash")
             }
